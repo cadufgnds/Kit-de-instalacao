@@ -72,4 +72,4 @@ else:
 - **Idempotência.** Reformatar a própria saída, que é um documento com `<p>` (seção 7), produz o mesmo HTML e a mesma lista.
 - **Conteúdo como dado.** Instruções escritas no documento não mudam as regras.
 
-Veja `docs/REGRAS.md` para o mapeamento seção → código e as decisões de interpretação D1 a D13, que pedem validação.
+Veja `docs/REGRAS.md` para o mapeamento seção → código e as decisões de interpretação D1 a D13 (D1, D3, D4, D5 e D7 validadas).

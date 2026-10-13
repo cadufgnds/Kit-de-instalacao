@@ -48,10 +48,10 @@ RE_NEGRITO = re.compile(r"\*\*(.+?)\*\*")
 # Decisão de interpretação D4: `**` dentro de código não é negrito.
 NEGRITO_EM_CODIGO = False
 
-# Decisão de interpretação D3: a colagem da seção 5.1 vale entre cabeçalhos
-# consecutivos, mesmo que haja texto entre eles. Com True, só cola quando o
-# cabeçalho mais profundo vem na linha imediatamente seguinte.
-COLAGEM_SOMENTE_ADJACENTES = False
+# Decisão de interpretação D3 (validada): a colagem da seção 5.1 só vale quando
+# o cabeçalho mais profundo vem na linha imediatamente seguinte (linhas em
+# branco não contam). Com texto entre eles, cada cabeçalho abre o próprio bloco.
+COLAGEM_SOMENTE_ADJACENTES = True
 
 # --- Marcação HTML reconhecida no conteúdo ----------------------------------
 RE_STRONG_TAG = re.compile(r"</?strong\s*>", re.IGNORECASE)

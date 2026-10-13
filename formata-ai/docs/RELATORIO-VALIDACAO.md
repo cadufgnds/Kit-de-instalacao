@@ -4,11 +4,11 @@ Gerado em 13/10/2026 por `scripts/gerar_relatorio.py`, contra as Diretrizes Form
 
 ## Suíte automatizada
 
-Resultado: **813 passed in 5.28s**
+Resultado: **814 passed in 5.61s**
 
 | Arquivo | O que cobre | Passou | Falhou |
 |---|---|---|---|
-| `test_medida_blocos.py` | Seções 5.1 e 5.2: custo por linha, delimitação e colagem de blocos | 26 | 0 |
+| `test_medida_blocos.py` | Seções 5.1 e 5.2: custo por linha, delimitação e colagem de blocos | 27 | 0 |
 | `test_paginacao.py` | Seções 5.3 e 5.4: FICA, QUEBRA, SEGUE, regra 4, exemplo literal, 300 sequências aleatórias | 317 | 0 |
 | `test_entrada_marcacao.py` | Seções 3, 4, 5.6 e 7: títulos, negrito, rodapé, imagens, documento com <p>, vazio, inválido | 45 | 0 |
 | `test_aceitacao.py` | Cenários de aceitação da especificação e testes de mutação da verificação | 23 | 0 |
@@ -240,7 +240,8 @@ Resultado: `documento_vazio` — Envie o documento a ser formatado.
 
 ```text
 Paginação:
-- Pág 1 | `# T` | Tam 4 | 34 − 4 = 30 | FICA
+- Pág 1 | `# T` | Tam 2 | 34 − 2 = 32 | FICA
+- Pág 1 | `## A` | Tam 2 | 32 − 2 = 30 | FICA
 ```
 
 Modo `markdown` · 4 parágrafos · 0 quebra(s) no HTML · 0 linha(s) removida(s) · verificações: aprovadas
@@ -254,11 +255,12 @@ Modo `markdown` · 4 parágrafos · 0 quebra(s) no HTML · 0 linha(s) removida(s
 
 ## Documento real
 
-Arquivo `tests/fixtures/kit_unico_v13.md` (cópia do `Kit de instalação_B2C.txt` deste repositório). 38 blocos, 18 páginas de texto, 15 quebras. Reformatar o HTML de saída produz o mesmo HTML (idempotência).
+Arquivo `tests/fixtures/kit_unico_v13.md` (cópia do `Kit de instalação_B2C.txt` deste repositório). 43 blocos, 18 páginas de texto, 15 quebras. Reformatar o HTML de saída produz o mesmo HTML (idempotência).
 
 ```text
 Paginação:
-- Pág 1 | `# KIT ÚNICO — FORMATAÇÃO, SEMÂNTICA E LINGUAGEM (v13, 09/09/2026)` | Tam 24 | 34 − 24 = 10 | FICA
+- Pág 1 | `# KIT ÚNICO — FORMATAÇÃO, SEMÂNTICA E LINGUAGEM (v13, 09/09/2026)` | Tam 12 | 34 − 12 = 22 | FICA
+- Pág 1 | `## Antes de reescrever: PR ou IT` | Tam 12 | 22 − 12 = 10 | FICA
 - Pág 1 | `# PARTE 1 — FORMATAÇÃO` | Tam 9 | 10 − 9 = 1 | FICA
 - Pág 2 | `## Hierarquia e numeração` | Tam 2 | 2 > 1; 40 − 2 = 38 | QUEBRA
 - Pág 2 | `# Título do documento` | Tam 9 | 38 − 9 = 29 | FICA
@@ -272,7 +274,8 @@ Paginação:
 - Pág 5 | `## Aderência entre título e corpo` | Tam 13 | 13 > 0; 40 − 13 = 27 | QUEBRA
 - Pág 5 | `## Quando abrir ou não abrir uma seção` | Tam 23 | 27 − 23 = 4 | FICA
 - Pág 6 | `## Bloco de abertura, resumo do processo` | Tam 37 | 37 > 4; 40 − 37 = 3 | QUEBRA
-- Pág 7 | `## Como montar a busca natural em camadas` | Tam 16 | 16 > 3; 40 − 16 = 24 | QUEBRA
+- Pág 7 | `## Como montar a busca natural em camadas` | Tam 11 | 11 > 3; 40 − 11 = 29 | QUEBRA
+- Pág 7 | `### 1. Termo oficial` | Tam 5 | 29 − 5 = 24 | FICA
 - Pág 7 | `### 2. Situação do cliente` | Tam 6 | 24 − 6 = 18 | FICA
 - Pág 7 | `### 3. Ação operacional` | Tam 6 | 18 − 6 = 12 | FICA
 - Pág 7 | `### 4. Sistema, tela ou fluxo` | Tam 5 | 12 − 5 = 7 | FICA
@@ -283,17 +286,20 @@ Paginação:
 - Pág 9 | `## Perguntas frequentes` | Tam 26 | 26 > 3; 40 − 26 = 14 | QUEBRA
 - Pág 9 | `## Como corrigir uma seção desalinhada` | Tam 8 | 14 − 8 = 6 | FICA
 - Pág 10 | `# PARTE 3 — LINGUAGEM` | Tam 16 | 16 > 6; 40 − 16 = 24 | QUEBRA
-- Pág 10 | `## Onde a riqueza é ganha de verdade` | Tam 22 | 24 − 22 = 2 | FICA
+- Pág 10 | `## Onde a riqueza é ganha de verdade` | Tam 6 | 24 − 6 = 18 | FICA
+- Pág 10 | `### Riqueza abaixo de 20%` | Tam 16 | 18 − 16 = 2 | FICA
 - Pág 11 | `### Densidade alta é folga para gastar` | Tam 10 | 10 > 2; 40 − 10 = 30 | QUEBRA
 - Pág 11 | `## Termos que nunca variam` | Tam 12 | 30 − 12 = 18 | FICA
 - Pág 12 | `## Onde variar` | Tam 19 | 19 > 18; 40 − 19 = 21 | QUEBRA
 - Pág 12 | `## Como decidir cada substituição` | Tam 9 | 21 − 9 = 12 | FICA
 - Pág 13 | `## Padrão de redação` | Tam 23 | 23 > 12; 40 − 23 = 17 | QUEBRA
-- Pág 14 | `# PARTE 4 — DOCUMENTOS IT` | Tam 24 | 24 > 17; 40 − 24 = 16 | QUEBRA
-- Pág 14 | `## Passos e telas` | Tam 11 | 16 − 11 = 5 | FICA
-- Pág 15 | `## Leitura das capturas de tela` | Tam 20 | 20 > 5; 40 − 20 = 20 | QUEBRA
+- Pág 13 | `# PARTE 4 — DOCUMENTOS IT` | Tam 5 | 17 − 5 = 12 | FICA
+- Pág 14 | `## Arquitetura de referência` | Tam 19 | 19 > 12; 40 − 19 = 21 | QUEBRA
+- Pág 14 | `## Passos e telas` | Tam 11 | 21 − 11 = 10 | FICA
+- Pág 15 | `## Leitura das capturas de tela` | Tam 20 | 20 > 10; 40 − 20 = 20 | QUEBRA
 - Pág 15 | `## Posição e forma das imagens` | Tam 16 | 20 − 16 = 4 | FICA
 - Pág 15 | `## Tamanho da reescrita` | Tam 4 | 4 − 4 = 0 | FICA
-- Pág 16 | `# LIMITE COMUM AOS TRÊS PILARES` | Tam 33 | 33 > 0; 40 − 33 = 7 | QUEBRA
+- Pág 16 | `# LIMITE COMUM AOS TRÊS PILARES` | Tam 11 | 11 > 0; 40 − 11 = 29 | QUEBRA
+- Pág 16 | `## Divergências: sempre fora do documento` | Tam 22 | 29 − 22 = 7 | FICA
 - Pág 18 | `# VERIFICAÇÃO ANTES DE ENTREGAR` | Tam 53 | 53 > 7; 7 < 8; 80 − 53 = 27 | QUEBRA
 ```

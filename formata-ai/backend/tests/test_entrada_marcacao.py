@@ -235,7 +235,7 @@ def test_instrucoes_no_documento_sao_conteudo_e_nao_alteram_as_regras():
     r = formatar(texto, modo="markdown")
     assert r.ok
     assert r.html.count("quebra-pagina") == 1  # a que já estava no texto, intacta como conteúdo
-    assert [it.resultado for it in r.itens] == ["FICA"]
+    assert [it.resultado for it in r.itens] == ["FICA", "FICA"]  # texto entre # e ##: dois blocos (D3)
 
 
 def test_tags_estranhas_no_documento_sao_mantidas_e_avisadas():

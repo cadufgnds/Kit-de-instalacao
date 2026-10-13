@@ -53,16 +53,19 @@ def test_colagem_so_quando_o_seguinte_e_mais_profundo():
     assert [r for r, _, _ in blocos] == ["## A", "## B", "# C"]
 
 
-def test_colagem_com_texto_entre_cabecalhos_consecutivos():
-    # Decisão D3: o cabeçalho seguinte mais profundo cola mesmo com texto entre eles.
-    blocos = _blocos("## Seção\nIntrodução.\n### Tópico\ncorpo")
-    assert len(blocos) == 1
-
-
-def test_colagem_somente_adjacentes_quando_configurado(monkeypatch):
-    monkeypatch.setattr(R, "COLAGEM_SOMENTE_ADJACENTES", True)
-    assert len(_blocos("## Seção\nIntrodução.\n### Tópico\ncorpo")) == 2
+def test_colagem_so_entre_cabecalhos_em_linhas_seguidas():
+    # Decisão D3 (validada): com texto entre o ## e o ###, são dois blocos.
+    assert [r for r, _, _ in _blocos("## Seção\nIntrodução.\n### Tópico\ncorpo")] == ["## Seção", "### Tópico"]
     assert len(_blocos("## Seção\n### Tópico\ncorpo")) == 1
+
+
+def test_linha_em_branco_entre_cabecalhos_nao_impede_a_colagem():
+    assert len(_blocos("# Doc\n\n## Seção\n\n### Tópico\ncorpo")) == 1
+
+
+def test_colagem_com_texto_entre_cabecalhos_quando_configurado(monkeypatch):
+    monkeypatch.setattr(R, "COLAGEM_SOMENTE_ADJACENTES", False)
+    assert len(_blocos("## Seção\nIntrodução.\n### Tópico\ncorpo")) == 1
 
 
 def test_linhas_antes_do_primeiro_cabecalho_pertencem_ao_primeiro_bloco():

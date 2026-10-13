@@ -31,7 +31,7 @@ Todos os números e textos fixos (34, 40, 85, 8, a tag de quebra e a linha de im
 
 **Blocos (seção 5.1).**
 - Um bloco começa em cada `#`, `##` ou `###`.
-- Quando o cabeçalho seguinte é mais profundo, ele cola no anterior. A colagem se encadeia: `#`, `##` e o primeiro `###` ficam juntos, e o segundo `###` abre outro bloco.
+- Quando o cabeçalho seguinte é mais profundo e vem na linha imediatamente seguinte, ele cola no anterior. A colagem se encadeia: `#`, `##` e o primeiro `###` ficam juntos, e o segundo `###` abre outro bloco. Linhas em branco entre os cabeçalhos não contam (decisão D3).
 - As linhas antes do primeiro cabeçalho pertencem ao primeiro bloco.
 
 **Medida (seção 5.2).** O custo de cada linha é `max(1, ⌈caracteres ÷ 85⌉)`, com a linha contada como está (`#`, `**`, `-`). O Tam do bloco é a soma dos custos das suas linhas.
@@ -81,22 +81,22 @@ O resultado só é entregue se passar em todas as verificações abaixo. Caso co
 7. **Simulação física.** Uma segunda conta, independente da fórmula, ocupa as páginas de 34 e 40 linhas, linha por linha. Ela precisa chegar à mesma Pág e ao mesmo Restante de cada item.
 8. **Lista contra HTML.** Os blocos são refeitos a partir do HTML final, e os rótulos e os Tam precisam bater com a lista.
 
-## Decisões de interpretação (para validação)
+## Decisões de interpretação
 
-Estes são os pontos em que as diretrizes não descem ao detalhe. Cada decisão segue a seção 7 (vale o que menos altera o texto) e está concentrada num só lugar do código.
+Estes são os pontos em que as diretrizes não descem ao detalhe. Cada decisão segue a seção 7 (vale o que menos altera o texto) e está concentrada num só lugar do código. A coluna "Status" mostra o que já foi validado pela área responsável: D1, D3, D4, D5 e D7 foram validados em 13/10/2026.
 
-| # | Ponto | Decisão adotada | Onde mudar |
-|---|---|---|---|
-| D1 | Regra 4: "até ficar positivo" | Para quando o Restante deixa de ser negativo; um Restante de 0 é aceito. Somar mais 40 inventaria uma página vazia, porque o bloco já completou a página exatamente. | `paginacao.paginar` |
-| D2 | Conta dos casos sem exemplo na seção 5.4 | Primeiro bloco: `50 > 34, primeiro bloco sem quebra; 74 − 50 = 24`. QUEBRA acima de 40: `45 > 4; 4 < 8; 80 − 45 = 35` ou `75 > 20; 75 > 60; 80 − 75 = 5`. Regra 4: `…; −30 + 40 = 10`. | `paginacao.paginar` |
-| D3 | Seção 5.1, "cabeçalhos vizinhos" | Um cabeçalho cola no cabeçalho seguinte quando este é mais profundo, mesmo com texto entre os dois. | `regras.COLAGEM_SOMENTE_ADJACENTES` (True = só quando estão em linhas seguidas) |
-| D4 | Código Markdown | Nas linhas entre cercas ` ``` ` ou `~~~`, `#` não é título nem abre bloco, e `**` não vira negrito. O mesmo vale para `**` dentro de `` `código` ``. As linhas continuam recebendo `<p>` e entrando na conta. | `regras.NEGRITO_EM_CODIGO`, `entrada.classificar` |
-| D5 | Rodapé (seção 4) | Uma linha entre as três últimas (já sem as linhas em branco) só é rodapé quando cumpre três critérios: cita confiabilidade ou validade, refere-se ao documento (documento, material, cópia, versão, impressão) e não traz termo de procedimento (cliente, CPF, fatura, oferta, plano, clique, acesse…). Título, tabela, passo numerado e marcador nunca são rodapé. O rodapé nunca deixa o documento vazio. Uma linha que cita validade mas não cumpre os critérios fica e gera aviso. | `regras.RE_RODAPE_*`, `entrada.eh_rodape` |
-| D6 | Marcador de imagem (seção 5.6) | Só padrões explícitos: `![…](…)`, `<img …>` e colchetes que começam por imagem, figura, print, captura de tela, screenshot, foto ou ilustração. Fora disso não se acrescenta nada ("na dúvida, não acrescentar"). Um marcador no meio do texto também aciona a linha de imagens. | `regras.RE_MARCADOR_IMAGEM` |
-| D7 | Marcadores no fim | Os marcadores que vêm no fim ficam depois da linha de imagens e, como estão na página de imagens, não entram na conta. | `entrada.preparar` |
-| D8 | Contagem de caracteres | Pontos de código Unicode, sem normalização: `ç` conta 1 e uma tabulação conta 1. As tags `<strong>` já presentes não contam. | `blocos.custo_linha` |
-| D9 | Quebras de linha | LF, CRLF e CR separam linhas, e o BOM inicial sai. Outros separadores Unicode ficam como conteúdo. | `entrada.normalizar_quebras_de_linha` |
-| D10 | Linha em branco | Conta como linha em branco a linha só com espaços, ou só com `&nbsp;` ou `<br>`. São as formas de espaçamento que a seção 6 proíbe, e a linha sai como parágrafo sem texto. | `entrada.eh_sem_texto` |
-| D11 | Documento com `<p>` (seção 7) | O modo HTML é detectado pela presença de `<p>`, e o modo pode ser forçado. Os atributos antigos do `<p>` saem e as quebras são recalculadas. Um `<strong>` existente fica (é um trecho em negrito), sem duplicação. O título recebe um `<strong>` único. A linha `[INSERIR IMAGENS]` anterior sai e é recolocada. Reformatar a própria saída produz o mesmo HTML. | `entrada._tokenizar_html`, `marcacao.marcar_conteudo` |
-| D12 | Rótulo de bloco sem cabeçalho | Usa a primeira linha, cortada em 60 caracteres com "…". O corte vale só para a lista; o documento não muda. | `blocos.Bloco.rotulo` |
-| D13 | Habilidade `diretrizes-formatacao` (seções 1 e 7) | Não se aplica: as regras estão no próprio motor, versionadas e testadas. | — |
+| # | Ponto | Decisão adotada | Onde mudar | Status |
+|---|---|---|---|---|
+| D1 | Regra 4: "até ficar positivo" | Para quando o Restante deixa de ser negativo; um Restante de 0 é aceito. Somar mais 40 inventaria uma página vazia, porque o bloco já completou a página exatamente. | `paginacao.paginar` | Validada |
+| D2 | Conta dos casos sem exemplo na seção 5.4 | Primeiro bloco: `50 > 34, primeiro bloco sem quebra; 74 − 50 = 24`. QUEBRA acima de 40: `45 > 4; 4 < 8; 80 − 45 = 35` ou `75 > 20; 75 > 60; 80 − 75 = 5`. Regra 4: `…; −30 + 40 = 10`. | `paginacao.paginar` | Adotada |
+| D3 | Seção 5.1, "cabeçalhos vizinhos" | Um cabeçalho só cola no seguinte quando este é mais profundo e está na linha imediatamente abaixo (linhas em branco não contam). Com texto entre eles, por exemplo `## Seção`, introdução e `### Tópico`, cada um abre o seu bloco. | `regras.COLAGEM_SOMENTE_ADJACENTES` (False = cola mesmo com texto entre eles) | Validada (alterada) |
+| D4 | Código Markdown | Nas linhas entre cercas ` ``` ` ou `~~~`, `#` não é título nem abre bloco, e `**` não vira negrito. O mesmo vale para `**` dentro de `` `código` ``. As linhas continuam recebendo `<p>` e entrando na conta. | `regras.NEGRITO_EM_CODIGO`, `entrada.classificar` | Validada |
+| D5 | Rodapé (seção 4) | Uma linha entre as três últimas (já sem as linhas em branco) só é rodapé quando cumpre três critérios: cita confiabilidade ou validade, refere-se ao documento (documento, material, cópia, versão, impressão) e não traz termo de procedimento (cliente, CPF, fatura, oferta, plano, clique, acesse…). Título, tabela, passo numerado e marcador nunca são rodapé. O rodapé nunca deixa o documento vazio. Uma linha que cita validade mas não cumpre os critérios fica e gera aviso. | `regras.RE_RODAPE_*`, `entrada.eh_rodape` | Validada |
+| D6 | Marcador de imagem (seção 5.6) | Só padrões explícitos: `![…](…)`, `<img …>` e colchetes que começam por imagem, figura, print, captura de tela, screenshot, foto ou ilustração. Fora disso não se acrescenta nada ("na dúvida, não acrescentar"). Um marcador no meio do texto também aciona a linha de imagens. | `regras.RE_MARCADOR_IMAGEM` | Adotada |
+| D7 | Marcadores no fim | Os marcadores que vêm no fim ficam depois da linha de imagens e, como estão na página de imagens, não entram na conta. | `entrada.preparar` | Validada |
+| D8 | Contagem de caracteres | Pontos de código Unicode, sem normalização: `ç` conta 1 e uma tabulação conta 1. As tags `<strong>` já presentes não contam. | `blocos.custo_linha` | Adotada |
+| D9 | Quebras de linha | LF, CRLF e CR separam linhas, e o BOM inicial sai. Outros separadores Unicode ficam como conteúdo. | `entrada.normalizar_quebras_de_linha` | Adotada |
+| D10 | Linha em branco | Conta como linha em branco a linha só com espaços, ou só com `&nbsp;` ou `<br>`. São as formas de espaçamento que a seção 6 proíbe, e a linha sai como parágrafo sem texto. | `entrada.eh_sem_texto` | Adotada |
+| D11 | Documento com `<p>` (seção 7) | O modo HTML é detectado pela presença de `<p>`, e o modo pode ser forçado. Os atributos antigos do `<p>` saem e as quebras são recalculadas. Um `<strong>` existente fica (é um trecho em negrito), sem duplicação. O título recebe um `<strong>` único. A linha `[INSERIR IMAGENS]` anterior sai e é recolocada. Reformatar a própria saída produz o mesmo HTML. | `entrada._tokenizar_html`, `marcacao.marcar_conteudo` | Adotada |
+| D12 | Rótulo de bloco sem cabeçalho | Usa a primeira linha, cortada em 60 caracteres com "…". O corte vale só para a lista; o documento não muda. | `blocos.Bloco.rotulo` | Adotada |
+| D13 | Habilidade `diretrizes-formatacao` (seções 1 e 7) | Não se aplica: as regras estão no próprio motor, versionadas e testadas. | — | Adotada |
