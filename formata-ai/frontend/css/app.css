@@ -81,12 +81,7 @@ a { color: var(--marca-roxo); }
 .topo { position: sticky; top: 0; z-index: 50; background: rgba(255, 255, 255, .96); border-bottom: 1px solid var(--marca-borda); backdrop-filter: saturate(1.4) blur(8px); }
 .topo__barra { display: flex; align-items: center; gap: 24px; min-height: 68px; }
 .logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--marca-roxo); font-weight: 800; font-size: 1.35rem; letter-spacing: -0.03em; }
-.logo__simbolo {
-  width: 30px; height: 30px; border-radius: 9px; background: var(--marca-roxo); position: relative; flex: none;
-  background-image: linear-gradient(#fff, #fff), linear-gradient(#fff, #fff), linear-gradient(#fff, #fff);
-  background-size: 15px 3px, 15px 3px, 10px 3px; background-position: 7px 8px, 7px 14px, 7px 20px; background-repeat: no-repeat;
-}
-.logo__simbolo::after { content: ""; position: absolute; right: 5px; bottom: 5px; width: 6px; height: 6px; border-radius: 50%; background: var(--marca-rosa); }
+.logo__icone { width: 44px; height: 44px; border-radius: 50%; flex: none; display: block; }
 .logo__destaque { color: var(--marca-texto); }
 .topo__nav { margin-left: auto; }
 .topo__nav ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
@@ -291,6 +286,5 @@ textarea:disabled { background: var(--marca-fundo-alt); color: var(--marca-texto
 .rodape p + p { margin-top: 10px; }
 .logo--rodape { color: #fff; margin-bottom: 12px; }
 .logo--rodape .logo__destaque { color: #f2d9ff; }
-.logo--rodape .logo__simbolo { background-color: #fff; background-image: linear-gradient(var(--marca-roxo), var(--marca-roxo)), linear-gradient(var(--marca-roxo), var(--marca-roxo)), linear-gradient(var(--marca-roxo), var(--marca-roxo)); }
 .rodape__versao { font-size: .85rem; color: #cdb7dc; }
 .rodape strong { color: #fff; }

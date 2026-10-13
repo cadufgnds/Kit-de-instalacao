@@ -96,6 +96,9 @@ def test_estado_inicial_deixa_claro_que_nada_foi_processado(pagina):
     assert pagina.is_hidden("#painel-resultado")
     assert pagina.is_hidden("#botao-tentar")
     assert pagina.inner_text("#versao-diretrizes") == "2.6"
+    # Ícone da página: favicon declarado e imagem do cabeçalho carregada.
+    assert pagina.get_attribute('link[rel="icon"][type="image/png"]', "href") == "marca/icone/icone-32.png"
+    assert pagina.evaluate("document.querySelector('.topo .logo__icone').naturalWidth") == 96
     assert pagina.erros_console == []
     _capturar(pagina, "01-inicio")
 
@@ -200,7 +203,7 @@ def test_conteudo_malicioso_nao_executa_nem_entra_no_dom(pagina):
     pagina.click("#aba-previa")
     pagina.wait_for_timeout(300)
     assert pagina.evaluate("window.__invadido") is None
-    assert pagina.evaluate("document.querySelectorAll('body img, body script:not([type=module])').length") == 0
+    assert pagina.evaluate("document.querySelectorAll('body img:not(.logo__icone), body script:not([type=module])').length") == 0
     assert "<script>" in pagina.locator("#saida-html").text_content()  # exibido como texto
     # Os únicos erros de console permitidos são os próprios bloqueios (sandbox ou CSP).
     assert all("Blocked" in e or "Content Security Policy" in e for e in pagina.erros_console)
