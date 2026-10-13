@@ -1,6 +1,6 @@
 # API do Formata.AI Web
 
-As duas versões, PHP (hub) e Python, têm o mesmo contrato. No hub, as rotas terminam em `.php`: `api/saude.php`, `api/configuracao.php`, `api/formatar.php` e `api/formatar/arquivo.php`, a partir da pasta da ferramenta (por exemplo, `https://hub/formata-ai/api/formatar.php`). No hub também existem os códigos `metodo_nao_permitido` (405) e, em `saude.php`, `requisito_ausente` (500, quando falta PHP 7.4 ou mbstring).
+As duas versões, PHP (hub) e Python, têm o mesmo contrato. No hub, as rotas terminam em `.php`: `api/saude.php`, `api/configuracao.php`, `api/formatar.php` e `api/formatar/arquivo.php`, a partir da pasta da ferramenta (por exemplo, `https://hub/formata-ai/api/formatar.php`). No hub também existem os códigos `metodo_nao_permitido` (405) e `erro_servidor` (500). O segundo aparece quando falta um requisito (PHP 5.6+, mbstring) ou quando um arquivo incluído, como o de login do hub, para com erro fatal. A mensagem diz o que aconteceu.
 
 Base: o mesmo endereço que entrega a landing page. A documentação interativa (OpenAPI) fica em `/api/docs`, e o esquema em `/api/openapi.json`; as duas podem ser desativadas com `FORMATA_DOCS_API=0`.
 

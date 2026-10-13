@@ -19,4 +19,8 @@ return [
 
     // Registro técnico no log de erros do PHP (sem o conteúdo dos documentos).
     'registrar_log' => true,
+
+    // Página diagnostico.php (mostra versão do PHP e o que falta no servidor).
+    // Depois que tudo estiver funcionando, pode trocar para false.
+    'diagnostico_ativo' => true,
 ];

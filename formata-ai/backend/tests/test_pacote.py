@@ -19,7 +19,8 @@ def test_zip_do_hub_corresponde_aos_fontes():
 def test_zip_tem_a_pasta_completa_e_sem_arquivos_de_desenvolvimento():
     nomes = set(zipfile.ZipFile(empacotar_php.ZIP_SAIDA).namelist())
     obrigatorios = {
-        "formata-ai/index.php", "formata-ai/config.php", "formata-ai/.htaccess", "formata-ai/LEIA-ME.txt",
+        "formata-ai/index.php", "formata-ai/config.php", "formata-ai/diagnostico.php", "formata-ai/LEIA-ME.txt",
+        "formata-ai/nucleo/requisitos.php", "formata-ai/ferramentas/.htaccess",
         "formata-ai/api/saude.php", "formata-ai/api/configuracao.php", "formata-ai/api/formatar.php",
         "formata-ai/api/formatar/arquivo.php", "formata-ai/nucleo/formata.php", "formata-ai/nucleo/api.php",
         "formata-ai/nucleo/.htaccess", "formata-ai/js/app.js", "formata-ai/css/app.css",

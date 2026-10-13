@@ -6,10 +6,9 @@
  * ok, codigo, mensagem e erros; nenhum documento é gravado em disco ou em log.
  */
 
-declare(strict_types=1);
-
 namespace FormataApi;
 
+require_once __DIR__ . '/requisitos.php';
 require_once __DIR__ . '/formata.php';
 
 const VERSAO_APP = '0.3.0';
@@ -32,7 +31,13 @@ const CSP = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inl
     . "img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; "
     . "base-uri 'none'; form-action 'self'; frame-ancestors 'none'";
 
-function config(): array
+function status_de($codigo)
+{
+    $mapa = STATUS_POR_CODIGO;
+    return isset($mapa[$codigo]) ? $mapa[$codigo] : 400;
+}
+
+function config()
 {
     static $config = null;
     if ($config === null) {
@@ -50,7 +55,7 @@ function config(): array
     return $config;
 }
 
-function cabecalhos_seguranca(): void
+function cabecalhos_seguranca()
 {
     header('X-Content-Type-Options: nosniff');
     header('Referrer-Policy: no-referrer');
@@ -63,7 +68,7 @@ function cabecalhos_seguranca(): void
  * Exige o login do hub quando config.php indica o arquivo de autenticação
  * que as outras ferramentas usam (o próprio arquivo decide redirecionar ou negar).
  */
-function exigir_autenticacao(): void
+function exigir_autenticacao()
 {
     $arquivo = trim((string) config()['arquivo_autenticacao']);
     if ($arquivo === '') {
@@ -76,7 +81,7 @@ function exigir_autenticacao(): void
     require_once $caminho;
 }
 
-function responder(array $dados, int $status = 200): void
+function responder(array $dados, $status = 200)
 {
     if (!headers_sent()) {
         http_response_code($status);
@@ -88,42 +93,43 @@ function responder(array $dados, int $status = 200): void
     exit;
 }
 
-function erro(string $codigo, string $mensagem, array $erros = []): void
+function erro($codigo, $mensagem, array $erros = [])
 {
     responder(['ok' => false, 'codigo' => $codigo, 'mensagem' => $mensagem, 'erros' => $erros],
-        STATUS_POR_CODIGO[$codigo] ?? 400);
+        status_de($codigo));
 }
 
-function mensagem_limite(): string
+function mensagem_limite()
 {
-    return 'O documento passa do limite de ' . intdiv((int) config()['limite_bytes'], 1024) . ' KB.';
+    return 'O documento passa do limite de ' . (int) floor((int) config()['limite_bytes'] / 1024) . ' KB.';
 }
 
 /** Início comum das rotas: cabeçalhos, autenticação, método e tamanho do corpo. */
-function iniciar_rota(string $metodo): void
+function iniciar_rota($metodo)
 {
     exigir_autenticacao();
-    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== $metodo) {
+    if ((isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET') !== $metodo) {
         header('Allow: ' . $metodo);
         erro('metodo_nao_permitido', "Use o método $metodo.");
     }
     if ($metodo === 'POST') {
-        $tamanho = $_SERVER['CONTENT_LENGTH'] ?? $_SERVER['HTTP_CONTENT_LENGTH'] ?? null;
+        $tamanho = isset($_SERVER['CONTENT_LENGTH']) ? $_SERVER['CONTENT_LENGTH'] : (isset($_SERVER['HTTP_CONTENT_LENGTH']) ? $_SERVER['HTTP_CONTENT_LENGTH'] : null);
         if ($tamanho === null || $tamanho === '') {
             erro('tamanho_desconhecido', 'Envie o cabeçalho Content-Length.');
         }
-        if (!ctype_digit((string) $tamanho) || (int) $tamanho > 2 * (int) config()['limite_bytes'] + 65536) {
+        if (!preg_match('/^\d+$/', (string) $tamanho) || (int) $tamanho > 2 * (int) config()['limite_bytes'] + 65536) {
             erro('documento_muito_extenso', mensagem_limite());
         }
     }
 }
 
-function vigiar_tempo_e_memoria(string $id, string $origem, int $bytes, float $inicio): void
+function vigiar_tempo_e_memoria($id, $origem, $bytes, $inicio)
 {
     $limite = (int) config()['tempo_limite'];
     if ($limite > 0) {
         set_time_limit($limite);
     }
+    $GLOBALS['formata_vigiando'] = true;
     register_shutdown_function(function () use ($id, $origem, $bytes, $inicio, $limite) {
         $e = error_get_last();
         if ($e === null || !in_array($e['type'], [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
@@ -141,7 +147,7 @@ function vigiar_tempo_e_memoria(string $id, string $origem, int $bytes, float $i
         $mensagem = $tempo
             ? "O processamento passou de {$limite} s e foi interrompido. Tente novamente."
             : 'Falha técnica no processamento. Tente novamente.';
-        http_response_code(STATUS_POR_CODIGO[$codigo]);
+        http_response_code(status_de($codigo));
         header('Content-Type: application/json; charset=utf-8');
         header('Cache-Control: no-store');
         echo json_encode(['ok' => false, 'codigo' => $codigo, 'mensagem' => $mensagem, 'erros' => []], JSON_UNESCAPED_UNICODE);
@@ -149,7 +155,7 @@ function vigiar_tempo_e_memoria(string $id, string $origem, int $bytes, float $i
 }
 
 /** Formata e responde. Nunca grava o conteúdo; o log técnico só tem tamanho, código e duração. */
-function processar(string $texto, string $modo, string $origem): void
+function processar($texto, $modo, $origem)
 {
     if (!in_array($modo, ['auto', 'markdown', 'html'], true)) {
         erro('modo_invalido', 'Modo deve ser auto, markdown ou html.');
@@ -161,23 +167,27 @@ function processar(string $texto, string $modo, string $origem): void
     if ($bytes > (int) config()['limite_bytes']) {
         erro('documento_muito_extenso', mensagem_limite());
     }
-    $id = bin2hex(random_bytes(6));
+    $id = function_exists('random_bytes') ? bin2hex(random_bytes(6)) : substr(md5(uniqid('', true)), 0, 12);
     $inicio = microtime(true);
     vigiar_tempo_e_memoria($id, $origem, $bytes, $inicio);
     @ini_set('pcre.backtrack_limit', '10000000');
 
     try {
         $resultado = \Formata\formatar($texto, $modo, (int) config()['limite_bytes'], (int) config()['limite_linhas']);
-    } catch (\Throwable $e) {
+    } catch (\Throwable $e) { // PHP 7+
+        registrar($id, $origem, $bytes, 'erro_interno', $inicio, null, get_class($e));
+        erro('erro_interno', 'Falha técnica no processamento. Tente novamente.');
+        return;
+    } catch (\Exception $e) { // PHP 5.6
         registrar($id, $origem, $bytes, 'erro_interno', $inicio, null, get_class($e));
         erro('erro_interno', 'Falha técnica no processamento. Tente novamente.');
         return;
     }
     registrar($id, $origem, $bytes, $resultado['codigo'], $inicio, $resultado);
-    responder($resultado, STATUS_POR_CODIGO[$resultado['codigo']] ?? 400);
+    responder($resultado, status_de($resultado['codigo']));
 }
 
-function registrar(string $id, string $origem, int $bytes, string $codigo, float $inicio, ?array $resultado = null, string $falha = ''): void
+function registrar($id, $origem, $bytes, $codigo, $inicio, $resultado = null, $falha = '')
 {
     if (!config()['registrar_log']) {
         return;
@@ -194,7 +204,7 @@ function registrar(string $id, string $origem, int $bytes, string $codigo, float
 }
 
 /** Converte valores do php.ini como "8M" em bytes. */
-function bytes_ini(string $valor): int
+function bytes_ini($valor)
 {
     $valor = trim($valor);
     if ($valor === '') {
@@ -213,11 +223,11 @@ function bytes_ini(string $valor): int
 }
 
 /** Mesma validação de arquivo da API de referência: extensão, Word/ZIP, tamanho, binário e UTF-8. */
-function ler_arquivo_enviado(): string
+function ler_arquivo_enviado()
 {
     if (!isset($_FILES['arquivo'])) {
         $post_max = bytes_ini((string) ini_get('post_max_size'));
-        if ($post_max > 0 && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > $post_max) {
+        if ($post_max > 0 && (int) (isset($_SERVER['CONTENT_LENGTH']) ? $_SERVER['CONTENT_LENGTH'] : 0) > $post_max) {
             erro('documento_muito_extenso', mensagem_limite());
         }
         erro('requisicao_invalida', "Envie o arquivo no campo 'arquivo'.");
@@ -234,7 +244,7 @@ function ler_arquivo_enviado(): string
     }
     $nome = (string) $arq['name'];
     $ponto = strrpos($nome, '.');
-    $extensao = $ponto === false ? '' : strtolower(substr($nome, $ponto));
+    $extensao = $ponto === false ? '' : strtolower((string) substr($nome, $ponto));
     $limite = (int) config()['limite_bytes'];
     $conteudo = (string) file_get_contents($arq['tmp_name'], false, null, 0, $limite + 1);
     @unlink($arq['tmp_name']); // o arquivo temporário sai logo: nada fica no servidor
@@ -257,7 +267,7 @@ function ler_arquivo_enviado(): string
     return $conteudo;
 }
 
-function ler_pedido_json(): array
+function ler_pedido_json()
 {
     $limite = 2 * (int) config()['limite_bytes'] + 65536;
     $corpo = (string) file_get_contents('php://input', false, null, 0, $limite + 1);

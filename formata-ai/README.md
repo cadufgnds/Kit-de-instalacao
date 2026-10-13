@@ -14,11 +14,11 @@ Nada disso altera um caractere do texto original.
 
 ## Instalar no hub (PHP)
 
-A ferramenta roda dentro do hub, como as demais: **PHP 7.4 ou superior**, sem banco de dados.
+A ferramenta roda dentro do hub, como as demais, ou sozinha em qualquer site com PHP: **PHP 5.6 ou superior**, sem banco de dados.
 
 1. Baixe [`entrega/formata-ai-php.zip`](entrega/formata-ai-php.zip).
 2. Extraia o arquivo e copie a pasta `formata-ai` para dentro da pasta do hub, ao lado de `admin`, `assets` e `includes`.
-3. Abra `https://ENDERECO-DO-HUB/formata-ai/api/saude.php`. Deve aparecer `{"status":"ok", ...}`.
+3. Abra `https://ENDERECO-DO-HUB/formata-ai/diagnostico.php`. Deve aparecer "Tudo certo". Se não aparecer, a página mostra o que falta no servidor.
 4. Abra `https://ENDERECO-DO-HUB/formata-ai/`.
 
 O passo a passo completo, com o login do hub e os problemas comuns, está no `LEIA-ME.txt` que vem dentro do pacote ([`php/LEIA-ME.txt`](php/LEIA-ME.txt)).
@@ -34,9 +34,11 @@ formata-ai/
 │   ├── css/app.css
 │   ├── js/app.js
 │   └── marca/marca.css       ← configuração de cores e fontes da marca
-├── php/                      versão para o hub (PHP 7.4+): API, motor e configuração
+├── php/                      versão para o hub (PHP 5.6+): API, motor e configuração
 │   ├── nucleo/formata.php    motor em PHP, equivalente ao de referência
 │   ├── nucleo/api.php        rotas, limites, login do hub, segurança
+│   ├── nucleo/requisitos.php requisitos e erros fatais com mensagem legível
+│   ├── diagnostico.php       página de diagnóstico do servidor
 │   ├── api/*.php             saude, configuracao, formatar, formatar/arquivo
 │   ├── config.php            limites e arquivo de login do hub
 │   └── LEIA-ME.txt           instalação em linguagem simples

@@ -7,11 +7,10 @@
  * (backend/tests/test_php.py): para a mesma entrada, o resultado tem de ser
  * idêntico, caractere por caractere.
  *
- * Compatível com PHP 7.4 ou superior, com as extensões mbstring e pcre.
+ * Compatível com PHP 5.6 ou superior, com as extensões mbstring e pcre (sintaxe
+ * mantida no subconjunto do 5.6: sem tipos escalares, sem ?? e sem <=>).
  * Posições internas são em bytes (UTF-8); contagens de caracteres usam mb_strlen.
  */
-
-declare(strict_types=1);
 
 namespace Formata;
 
@@ -88,22 +87,22 @@ const MOTIVO_IMAGENS_ANTERIOR = 'linha_imagens_anterior';
 
 // ---------------------------------------------------------------- utilidades
 
-function comprimento(string $s): int
+function comprimento($s)
 {
     return mb_strlen($s, 'UTF-8');
 }
 
-function aparar(string $s): string
+function aparar($s)
 {
     return preg_replace('/^[' . R::ESP . ']+|[' . R::ESP . ']+\z/u', '', $s);
 }
 
-function aparar_direita(string $s): string
+function aparar_direita($s)
 {
     return preg_replace('/[' . R::ESP . ']+\z/u', '', $s);
 }
 
-function vazio_apos_aparar(string $s): bool
+function vazio_apos_aparar($s)
 {
     return aparar($s) === '';
 }
@@ -113,7 +112,7 @@ function vazio_apos_aparar(string $s): bool
  * o que estouraria a memória em linhas com centenas de milhares de ocorrências).
  * Nenhuma expressão do motor casa com texto vazio.
  */
-function ocorrencias(string $re, string $s): \Generator
+function ocorrencias($re, $s)
 {
     $pos = 0;
     while (preg_match($re, $s, $m, PREG_OFFSET_CAPTURE, $pos)) {
@@ -122,9 +121,9 @@ function ocorrencias(string $re, string $s): \Generator
     }
 }
 
-function numero(int $n): string
+function numero($n)
 {
-    return $n < 0 ? "\u{2212}" . abs($n) : (string) $n;
+    return $n < 0 ? "\xE2\x88\x92" . abs($n) : (string) $n;
 }
 
 // ------------------------------------------------------------------ entrada
@@ -134,7 +133,7 @@ final class EntradaInvalida extends \RuntimeException
     public $codigo;
     public $mensagem;
 
-    public function __construct(string $codigo, string $mensagem)
+    public function __construct($codigo, $mensagem)
     {
         parent::__construct($mensagem);
         $this->codigo = $codigo;
@@ -150,7 +149,7 @@ final class Linha
     public $em_codigo = false;
     public $nivel_titulo = 0;
 
-    public function __construct(int $numero, string $bruto)
+    public function __construct($numero, $bruto)
     {
         $this->numero = $numero;
         $this->bruto = $bruto;
@@ -169,17 +168,17 @@ final class Entrada
     /** @var string[] */ public $avisos;
 }
 
-function remocao(int $numero, string $motivo, string $texto): array
+function remocao($numero, $motivo, $texto)
 {
     return ['numero' => $numero, 'motivo' => $motivo, 'texto' => $texto];
 }
 
-function detectar_modo(string $texto): string
+function detectar_modo($texto)
 {
     return preg_match(R::RE_P_ABERTURA, $texto) ? MODO_HTML : MODO_MARKDOWN;
 }
 
-function normalizar_quebras_de_linha(string $texto): string
+function normalizar_quebras_de_linha($texto)
 {
     if (strncmp($texto, "\xEF\xBB\xBF", 3) === 0) {
         $texto = substr($texto, 3);
@@ -188,7 +187,7 @@ function normalizar_quebras_de_linha(string $texto): string
 }
 
 /** @return array{0: Linha[], 1: string[]} */
-function tokenizar(string $texto, string $modo): array
+function tokenizar($texto, $modo)
 {
     if ($modo === MODO_MARKDOWN) {
         $linhas = [];
@@ -201,13 +200,13 @@ function tokenizar(string $texto, string $modo): array
 }
 
 /** Seção 7: em documento que já chega com <p>, cada <p>...</p> é uma linha. */
-function tokenizar_html(string $texto): array
+function tokenizar_html($texto)
 {
     $linhas = [];
     $avisos = [];
     $fora_de_p = $quebras_antigas = $outros_atributos = $multilinha = 0;
 
-    $adicionar_solto = function (string $trecho) use (&$linhas, &$fora_de_p) {
+    $adicionar_solto = function ($trecho) use (&$linhas, &$fora_de_p) {
         foreach (explode("\n", $trecho) as $parte) {
             if (!vazio_apos_aparar($parte)) {
                 $fora_de_p++;
@@ -222,7 +221,7 @@ function tokenizar_html(string $texto): array
         if (!preg_match(R::RE_P_FECHAMENTO, $texto, $f, PREG_OFFSET_CAPTURE, $fim_abertura)) {
             break; // <p> sem fechamento: o resto é texto solto
         }
-        $adicionar_solto(substr($texto, $pos, $m[0][1] - $pos));
+        $adicionar_solto((string) substr($texto, $pos, $m[0][1] - $pos));
         $atributos = (isset($m[1]) && $m[1][1] >= 0) ? aparar($m[1][0]) : '';
         if ($atributos !== '') {
             if (strpos($atributos, 'quebra-pagina') !== false || strpos($atributos, 'page-break') !== false) {
@@ -231,7 +230,7 @@ function tokenizar_html(string $texto): array
                 $outros_atributos++;
             }
         }
-        $conteudo = substr($texto, $fim_abertura, $f[0][1] - $fim_abertura);
+        $conteudo = (string) substr($texto, $fim_abertura, $f[0][1] - $fim_abertura);
         if (strpos($conteudo, "\n") !== false) {
             $multilinha++;
         }
@@ -255,18 +254,18 @@ function tokenizar_html(string $texto): array
     return [$linhas, $avisos];
 }
 
-function eh_sem_texto(string $texto): bool
+function eh_sem_texto($texto)
 {
     return vazio_apos_aparar(preg_replace(R::RE_SEM_TEXTO, '', $texto));
 }
 
-function nivel_titulo(string $texto): int
+function nivel_titulo($texto)
 {
     return preg_match(R::RE_TITULO, $texto, $m) ? strlen($m[1]) : 0;
 }
 
 /** Marca blocos de código cercados e títulos ATX. Devolve avisos. @param Linha[] $linhas */
-function classificar(array $linhas): array
+function classificar(array $linhas)
 {
     $cerca = null;
     foreach ($linhas as $linha) {
@@ -292,13 +291,13 @@ function classificar(array $linhas): array
     return [];
 }
 
-function eh_marcador_so(Linha $linha): bool
+function eh_marcador_so(Linha $linha)
 {
     return !$linha->em_codigo && (bool) preg_match(R::RE_LINHA_SO_MARCADORES, $linha->texto);
 }
 
 /** Seção 4: refere-se à confiabilidade ou validade do documento e não é procedimento. */
-function eh_rodape(Linha $linha): bool
+function eh_rodape(Linha $linha)
 {
     $t = aparar($linha->texto);
     if ($linha->em_codigo || $linha->nivel_titulo || ($t !== '' && ($t[0] === '#' || $t[0] === '|')) || eh_marcador_so($linha)) {
@@ -313,11 +312,11 @@ function eh_rodape(Linha $linha): bool
 }
 
 function preparar(
-    string $texto,
-    string $modo = 'auto',
-    int $limite_caracteres = R::LIMITE_CARACTERES_PADRAO,
-    int $limite_linhas = R::LIMITE_LINHAS_PADRAO
-): Entrada {
+    $texto,
+    $modo = 'auto',
+    $limite_caracteres = R::LIMITE_CARACTERES_PADRAO,
+    $limite_linhas = R::LIMITE_LINHAS_PADRAO
+) {
     if (!mb_check_encoding($texto, 'UTF-8')) {
         throw new EntradaInvalida('entrada_invalida', 'O conteúdo enviado não é texto em UTF-8.');
     }
@@ -337,7 +336,7 @@ function preparar(
         throw new EntradaInvalida('modo_invalido', "Modo desconhecido: $modo.");
     }
 
-    [$tokenizadas, $avisos] = tokenizar($texto, $modo);
+    list($tokenizadas, $avisos) = tokenizar($texto, $modo);
     if (count($tokenizadas) > $limite_linhas) {
         $q = count($tokenizadas);
         throw new EntradaInvalida('documento_muito_extenso', "O documento tem $q linhas; o limite é $limite_linhas.");
@@ -425,7 +424,7 @@ function preparar(
     }
 
     usort($removidas, function (array $a, array $b) {
-        return $a['numero'] <=> $b['numero'];
+        return $a['numero'] < $b['numero'] ? -1 : ($a['numero'] > $b['numero'] ? 1 : 0);
     });
 
     $entrada = new Entrada();
@@ -441,9 +440,9 @@ function preparar(
 
 // ------------------------------------------------------------------- blocos
 
-function custo_linha(string $texto): int
+function custo_linha($texto)
 {
-    return max(1, intdiv(comprimento($texto) + R::CARACTERES_POR_LINHA - 1, R::CARACTERES_POR_LINHA));
+    return max(1, (int) floor((comprimento($texto) + R::CARACTERES_POR_LINHA - 1) / R::CARACTERES_POR_LINHA));
 }
 
 final class Bloco
@@ -452,14 +451,14 @@ final class Bloco
     public $inicio;
     /** @var Linha[] */ public $linhas;
 
-    public function __construct(int $indice, int $inicio, array $linhas)
+    public function __construct($indice, $inicio, array $linhas)
     {
         $this->indice = $indice;
         $this->inicio = $inicio;
         $this->linhas = $linhas;
     }
 
-    public function tam(): int
+    public function tam()
     {
         $t = 0;
         foreach ($this->linhas as $l) {
@@ -468,7 +467,7 @@ final class Bloco
         return $t;
     }
 
-    public function rotulo(): string
+    public function rotulo()
     {
         foreach ($this->linhas as $l) {
             if (abre_bloco($l)) {
@@ -477,19 +476,19 @@ final class Bloco
         }
         $texto = aparar($this->linhas[0]->texto);
         if (comprimento($texto) > 60) {
-            $texto = aparar_direita(mb_substr($texto, 0, 60, 'UTF-8')) . "\u{2026}";
+            $texto = aparar_direita(mb_substr($texto, 0, 60, 'UTF-8')) . "\xE2\x80\xA6";
         }
         return $texto;
     }
 }
 
-function abre_bloco(Linha $linha): bool
+function abre_bloco(Linha $linha)
 {
     return !$linha->em_codigo && $linha->nivel_titulo >= 1 && $linha->nivel_titulo <= R::NIVEL_MAXIMO_BLOCO;
 }
 
 /** Seção 5.1. @param Linha[] $linhas @return Bloco[] */
-function delimitar_blocos(array $linhas): array
+function delimitar_blocos(array $linhas)
 {
     if (!$linhas) {
         return [];
@@ -515,7 +514,7 @@ function delimitar_blocos(array $linhas): array
     $blocos = [];
     $total = count($linhas);
     foreach ($inicios as $k => $ini) {
-        $fim = $inicios[$k + 1] ?? $total;
+        $fim = isset($inicios[$k + 1]) ? $inicios[$k + 1] : $total;
         $blocos[] = new Bloco($k + 1, $ini, array_slice($linhas, $ini, $fim - $ini));
     }
     return $blocos;
@@ -524,13 +523,14 @@ function delimitar_blocos(array $linhas): array
 // ---------------------------------------------------------------- paginação
 
 /** Seção 5.3. @param array<int, array{0: string, 1: int}> $blocos @return array[] */
-function paginar(array $blocos): array
+function paginar(array $blocos)
 {
     $itens = [];
     $pagina = 1;
     $restante = R::LIMITE_PAGINA_1;
     $cheia = R::LIMITE_DEMAIS_PAGINAS;
-    foreach ($blocos as $k => [$rotulo, $tam]) {
+    foreach ($blocos as $k => $par) {
+        list($rotulo, $tam) = $par;
         $indice = $k + 1;
         if ($tam < 1) {
             throw new \InvalidArgumentException("Bloco $indice com Tam $tam: todo bloco tem ao menos uma linha.");
@@ -541,33 +541,33 @@ function paginar(array $blocos): array
         if ($tam <= $restante) {
             $resultado = R::FICA;
             $novo = $restante - $tam;
-            $conta = "$restante \u{2212} $tam = " . numero($novo);
+            $conta = "$restante \xE2\x88\x92 $tam = " . numero($novo);
         } elseif ($indice === 1) {
             $resultado = R::SEGUE;
             $base = $restante + $cheia;
             $novo = $base - $tam;
             $pagina++;
-            $conta = "$tam > $restante; $base \u{2212} $tam";
+            $conta = "$tam > $restante; $base \xE2\x88\x92 $tam";
             $regra4 = true;
         } elseif ($tam <= $cheia) {
             $resultado = R::QUEBRA;
             $novo = $cheia - $tam;
             $pagina++;
             $inicio = $pagina;
-            $conta = "$tam > $restante; $cheia \u{2212} $tam = " . numero($novo);
+            $conta = "$tam > $restante; $cheia \xE2\x88\x92 $tam = " . numero($novo);
         } elseif ($restante >= R::RESTANTE_MINIMO_SEGUE && $tam <= $restante + $cheia) {
             $resultado = R::SEGUE;
             $base = $restante + $cheia;
             $novo = $base - $tam;
             $pagina++;
-            $conta = "$restante \u{2265} " . R::RESTANTE_MINIMO_SEGUE . " e $tam \u{2264} $base; $base \u{2212} $tam = " . numero($novo);
+            $conta = "$restante \xE2\x89\xA5 " . R::RESTANTE_MINIMO_SEGUE . " e $tam \xE2\x89\xA4 $base; $base \xE2\x88\x92 $tam = " . numero($novo);
         } else {
             $resultado = R::QUEBRA;
             $base = 2 * $cheia;
             $novo = $base - $tam;
             $inicio = $pagina + 1;
             $pagina += 2;
-            $conta = "$tam > $restante; $base \u{2212} $tam";
+            $conta = "$tam > $restante; $base \xE2\x88\x92 $tam";
             $regra4 = true;
         }
         if ($regra4) {
@@ -598,7 +598,7 @@ function paginar(array $blocos): array
     return $itens;
 }
 
-function texto_lista(array $itens, bool $tem_imagens): string
+function texto_lista(array $itens, $tem_imagens)
 {
     $linhas = ['Paginação:'];
     foreach ($itens as $it) {
@@ -613,15 +613,15 @@ function texto_lista(array $itens, bool $tem_imagens): string
 // ----------------------------------------------------------------- marcação
 
 /** Separa as tags <strong> do texto; null se desbalanceadas. Tokens: [tipo, valor]. */
-function tokenizar_strong(string $bruto): ?array
+function tokenizar_strong($bruto)
 {
     $tokens = [];
     $prof = 0;
     $pos = 0;
     foreach (ocorrencias(R::RE_STRONG_TAG, $bruto) as $m) {
-        [$tag, $ini] = $m[0];
+        list($tag, $ini) = $m[0];
         if ($ini > $pos) {
-            $tokens[] = ['texto', substr($bruto, $pos, $ini - $pos)];
+            $tokens[] = ['texto', (string) substr($bruto, $pos, $ini - $pos)];
         }
         $fecha = $tag[1] === '/';
         $prof += $fecha ? -1 : 1;
@@ -632,13 +632,13 @@ function tokenizar_strong(string $bruto): ?array
         $pos = $ini + strlen($tag);
     }
     if ($pos < strlen($bruto)) {
-        $tokens[] = ['texto', substr($bruto, $pos)];
+        $tokens[] = ['texto', (string) substr($bruto, $pos)];
     }
     return $prof === 0 ? $tokens : null;
 }
 
 /** Remove <strong> internos a outro <strong>; o texto não muda. */
-function achatar_strong(array $tokens): array
+function achatar_strong(array $tokens)
 {
     $saida = [];
     $prof = 0;
@@ -661,7 +661,7 @@ function achatar_strong(array $tokens): array
     return [$saida, $achatou];
 }
 
-function mascarar_codigo_inline(string $texto): string
+function mascarar_codigo_inline($texto)
 {
     return preg_replace_callback(R::RE_CODIGO_INLINE, function ($m) {
         return str_repeat("\0", strlen($m[0]));
@@ -669,7 +669,7 @@ function mascarar_codigo_inline(string $texto): string
 }
 
 /** Posições [início, fim) em bytes de cada **texto** a envolver. */
-function trechos_negrito(string $texto, bool $em_codigo): array
+function trechos_negrito($texto, $em_codigo)
 {
     if ($em_codigo && !R::NEGRITO_EM_CODIGO) {
         return [];
@@ -682,7 +682,7 @@ function trechos_negrito(string $texto, bool $em_codigo): array
     return $saida;
 }
 
-function marcar_conteudo(Linha $linha, array &$avisos): string
+function marcar_conteudo(Linha $linha, array &$avisos)
 {
     $texto = $linha->texto;
     if ($linha->nivel_titulo && !$linha->em_codigo) {
@@ -697,7 +697,7 @@ function marcar_conteudo(Linha $linha, array &$avisos): string
         $avisos[] = "Linha {$linha->numero}: tags <strong> desbalanceadas foram descartadas e o negrito foi reaplicado.";
         $tokens = [['texto', $texto]];
     }
-    [$tokens, $achatou] = achatar_strong($tokens);
+    list($tokens, $achatou) = achatar_strong($tokens);
     if ($achatou) {
         $avisos[] = "Linha {$linha->numero}: <strong> aninhado na entrada; mantido só o mais externo.";
     }
@@ -717,8 +717,8 @@ function marcar_conteudo(Linha $linha, array &$avisos): string
 
     $aberturas = [];
     $fechamentos = [];
-    foreach (trechos_negrito($texto, $linha->em_codigo) as [$ini, $fim]) {
-        $trecho = substr($mascara, $ini, $fim - $ini);
+    foreach (trechos_negrito($texto, $linha->em_codigo) as list($ini, $fim)) {
+        $trecho = (string) substr($mascara, $ini, $fim - $ini);
         if (strspn($trecho, '1') === strlen($trecho)) {
             continue; // já está em negrito
         }
@@ -740,7 +740,7 @@ function marcar_conteudo(Linha $linha, array &$avisos): string
  * byte de início e o fechamento logo depois do último byte do trecho, na mesma
  * ordem que a implementação de referência.
  */
-function renderizar(array $tokens, array $aberturas, array $fechamentos): string
+function renderizar(array $tokens, array $aberturas, array $fechamentos)
 {
     $saida = '';
     $a = 0; // ponteiro em $aberturas
@@ -777,12 +777,12 @@ function renderizar(array $tokens, array $aberturas, array $fechamentos): string
     return $saida;
 }
 
-function paragrafo(string $conteudo, bool $quebra): string
+function paragrafo($conteudo, $quebra)
 {
     return ($quebra ? R::P_ABRE_QUEBRA : R::P_ABRE) . $conteudo . R::P_FECHA;
 }
 
-function gerar_html(array $linhas, array $inicios_quebra, array $marcadores_finais, bool $tem_imagens, array &$avisos): string
+function gerar_html(array $linhas, array $inicios_quebra, array $marcadores_finais, $tem_imagens, array &$avisos)
 {
     $saida = [];
     foreach ($linhas as $i => $l) {
@@ -805,13 +805,13 @@ final class FormatoInvalido extends \RuntimeException
 {
 }
 
-function posicao_caracteres(string $s, int $bytes): int
+function posicao_caracteres($s, $bytes)
 {
-    return comprimento(substr($s, 0, $bytes));
+    return comprimento((string) substr($s, 0, $bytes));
 }
 
 /** Lê o HTML de saída como sequência de <p>, um por linha. @return array<int, array{0: bool, 1: string}> */
-function separar_paragrafos(string $html): array
+function separar_paragrafos($html)
 {
     $paragrafos = [];
     $pos = 0;
@@ -838,7 +838,7 @@ function separar_paragrafos(string $html): array
             }
             $busca = $fim + 1;
         }
-        $paragrafos[] = [$quebra, substr($html, $inicio, $fim - $inicio)];
+        $paragrafos[] = [$quebra, (string) substr($html, $inicio, $fim - $inicio)];
         $pos = $depois + 1;
         if ($depois < $n && $pos === $n) {
             throw new FormatoInvalido('Linha vazia no fim da saída.');
@@ -848,7 +848,7 @@ function separar_paragrafos(string $html): array
 }
 
 /** Intervalos (em bytes do texto sem tags) dentro de <strong>, profundidade máxima e problema. */
-function spans_strong(string $conteudo): array
+function spans_strong($conteudo)
 {
     $spans = [];
     $prof = $maxima = 0;
@@ -880,7 +880,7 @@ function spans_strong(string $conteudo): array
     return [$spans, $maxima, null];
 }
 
-function outras_tags(string $conteudo): array
+function outras_tags($conteudo)
 {
     preg_match_all(R::RE_TAG_QUALQUER, $conteudo, $ms);
     return array_values(array_filter($ms[0], function ($t) {
@@ -888,7 +888,7 @@ function outras_tags(string $conteudo): array
     }));
 }
 
-function verificar(Entrada $entrada, array $blocos, array $itens, string $html, array $avisos_marcacao): array
+function verificar(Entrada $entrada, array $blocos, array $itens, $html, array $avisos_marcacao)
 {
     $erros = verificar_remocoes($entrada);
     try {
@@ -930,7 +930,7 @@ function verificar(Entrada $entrada, array $blocos, array $itens, string $html, 
     }
     $conteudo_saida = [];
     $k = 0;
-    foreach ($paragrafos as $i => [$quebra, $conteudo]) {
+    foreach ($paragrafos as $i => list($quebra, $conteudo)) {
         if ($i === $pos_imagens) {
             if (R::P_ABRE_QUEBRA . $conteudo . R::P_FECHA !== R::LINHA_IMAGENS) {
                 $erros[] = 'Imagens: a linha de abertura da página de imagens está diferente do padrão.';
@@ -948,7 +948,7 @@ function verificar(Entrada $entrada, array $blocos, array $itens, string $html, 
     return $erros;
 }
 
-function verificar_remocoes(Entrada $entrada): array
+function verificar_remocoes(Entrada $entrada)
 {
     $erros = [];
     $por_numero = [];
@@ -969,7 +969,7 @@ function verificar_remocoes(Entrada $entrada): array
     }
     $janela = array_flip(array_slice($candidatas, -R::RODAPE_JANELA));
     foreach ($entrada->removidas as $r) {
-        $linha = $por_numero[$r['numero']] ?? null;
+        $linha = isset($por_numero[$r['numero']]) ? $por_numero[$r['numero']] : null;
         $n = $r['numero'];
         if ($linha === null || $linha->bruto !== $r['texto']) {
             $erros[] = "Remoção da linha $n não corresponde à entrada.";
@@ -992,7 +992,7 @@ function verificar_remocoes(Entrada $entrada): array
     return $erros;
 }
 
-function verificar_paragrafo(int $n, Linha $linha, string $conteudo, array $sobrepostas): array
+function verificar_paragrafo($n, Linha $linha, $conteudo, array $sobrepostas)
 {
     $erros = [];
     $texto_saida = preg_replace(RE_STRONG_QUALQUER, '', $conteudo);
@@ -1007,7 +1007,7 @@ function verificar_paragrafo(int $n, Linha $linha, string $conteudo, array $sobr
     if (outras_tags($conteudo) !== outras_tags($linha->bruto)) {
         $erros[] = "Parágrafo $n: tag além de <p> e <strong> introduzida.";
     }
-    [$spans, $maxima, $problema] = spans_strong($conteudo);
+    list($spans, $maxima, $problema) = spans_strong($conteudo);
     if ($problema !== null) {
         $erros[] = "Parágrafo $n: $problema.";
         return $erros;
@@ -1029,7 +1029,7 @@ function verificar_paragrafo(int $n, Linha $linha, string $conteudo, array $sobr
     $sobreposto = isset($sobrepostas[$linha->numero]);
     $k = 0;
     $total = count($spans);
-    foreach ($negritos as [$ini, $fim]) {
+    foreach ($negritos as list($ini, $fim)) {
         while ($k < $total && $spans[$k][1] < $fim) {
             $k++;
         }
@@ -1039,7 +1039,7 @@ function verificar_paragrafo(int $n, Linha $linha, string $conteudo, array $sobr
             break;
         }
     }
-    foreach ($negritos as [$ini, $fim]) {
+    foreach ($negritos as list($ini, $fim)) {
         $permitidos[$ini . ':' . $fim] = true;
     }
     foreach ($spans as $s) {
@@ -1051,7 +1051,7 @@ function verificar_paragrafo(int $n, Linha $linha, string $conteudo, array $sobr
     return $erros;
 }
 
-function verificar_quebras(array $blocos, array $itens, array $paragrafos, ?int $pos_imagens): array
+function verificar_quebras(array $blocos, array $itens, array $paragrafos, $pos_imagens)
 {
     $erros = [];
     $esperadas = [];
@@ -1064,7 +1064,7 @@ function verificar_quebras(array $blocos, array $itens, array $paragrafos, ?int 
         $esperadas[$pos_imagens] = true;
     }
     $marcadas = [];
-    foreach ($paragrafos as $i => [$quebra]) {
+    foreach ($paragrafos as $i => list($quebra)) {
         if ($quebra) {
             $marcadas[$i] = true;
         }
@@ -1092,14 +1092,14 @@ function verificar_quebras(array $blocos, array $itens, array $paragrafos, ?int 
 }
 
 /** Conferência da seção 5.4 mais uma simulação física das páginas. */
-function verificar_lista(array $itens): array
+function verificar_lista(array $itens)
 {
     $erros = [];
     $restante = R::LIMITE_PAGINA_1;
     $pagina_anterior = 1;
     $pagina = 1;
     $usado = 0;
-    $capacidade = function (int $p): int {
+    $capacidade = function ($p) {
         return $p === 1 ? R::LIMITE_PAGINA_1 : R::LIMITE_DEMAIS_PAGINAS;
     };
     foreach ($itens as $i => $it) {
@@ -1129,7 +1129,7 @@ function verificar_lista(array $itens): array
                 $erros[] = "$rot: o primeiro bloco nunca leva quebra.";
             }
             if ($T <= $Ra) {
-                $erros[] = "$rot: quebra com espaço sobrando ($T \u{2264} $Ra).";
+                $erros[] = "$rot: quebra com espaço sobrando ($T \xE2\x89\xA4 $Ra).";
             }
             if ($T > $cheia && $Ra >= R::RESTANTE_MINIMO_SEGUE && $T <= $Ra + $cheia) {
                 $erros[] = "$rot: QUEBRA onde a regra pede SEGUE.";
@@ -1138,7 +1138,7 @@ function verificar_lista(array $itens): array
             $primeiro = $k === 1 && $T > $Ra;
             $normal = $Ra >= R::RESTANTE_MINIMO_SEGUE && $cheia < $T && $T <= $Ra + $cheia;
             if (!($primeiro || $normal)) {
-                $erros[] = "$rot: SEGUE sem cumprir Restante \u{2265} 8 e Tam \u{2264} Restante + 40.";
+                $erros[] = "$rot: SEGUE sem cumprir Restante \xE2\x89\xA5 8 e Tam \xE2\x89\xA4 Restante + 40.";
             }
         } else {
             $erros[] = "$rot: resultado desconhecido {$it['resultado']}.";
@@ -1179,7 +1179,7 @@ function verificar_lista(array $itens): array
 }
 
 /** Refaz os blocos a partir do próprio HTML e compara com a lista. */
-function verificar_lista_contra_html(array $itens, array $conteudos): array
+function verificar_lista_contra_html(array $itens, array $conteudos)
 {
     $linhas = [];
     foreach ($conteudos as $i => $c) {
@@ -1203,7 +1203,7 @@ function verificar_lista_contra_html(array $itens, array $conteudos): array
 
 // -------------------------------------------------------------------- motor
 
-function bloco_de_codigo(string $html): string
+function bloco_de_codigo($html)
 {
     $maior = 0;
     if (preg_match_all('/`{3,}/', $html, $ms)) {
@@ -1215,7 +1215,7 @@ function bloco_de_codigo(string $html): string
     return "$cerca\n$html\n$cerca";
 }
 
-function resultado_base(bool $ok, string $codigo, string $mensagem): array
+function resultado_base($ok, $codigo, $mensagem)
 {
     return [
         'ok' => $ok,
@@ -1240,11 +1240,11 @@ function resultado_base(bool $ok, string $codigo, string $mensagem): array
  * referência (campos ok, codigo, mensagem, lista_paginacao, itens, html, ...).
  */
 function formatar(
-    string $texto,
-    string $modo = 'auto',
-    int $limite_caracteres = R::LIMITE_CARACTERES_PADRAO,
-    int $limite_linhas = R::LIMITE_LINHAS_PADRAO
-): array {
+    $texto,
+    $modo = 'auto',
+    $limite_caracteres = R::LIMITE_CARACTERES_PADRAO,
+    $limite_linhas = R::LIMITE_LINHAS_PADRAO
+) {
     try {
         $entrada = preparar($texto, $modo, $limite_caracteres, $limite_linhas);
     } catch (EntradaInvalida $e) {

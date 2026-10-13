@@ -11,12 +11,14 @@ Nenhuma das duas usa banco de dados, armazenamento ou serviço externo.
 
 1. Gere ou baixe o pacote `entrega/formata-ai-php.zip` (`python backend/scripts/empacotar_php.py`).
 2. Copie a pasta `formata-ai` do pacote para dentro da pasta do hub.
-3. Confira `https://ENDERECO-DO-HUB/formata-ai/api/saude.php`, que deve responder `{"status":"ok", ...}`.
+3. Abra `https://ENDERECO-DO-HUB/formata-ai/diagnostico.php` e confira se aparece "Tudo certo". A página verifica a versão do PHP, as extensões, os limites de memória e de envio, os arquivos da ferramenta e o login configurado, e formata um documento de teste.
 4. Em `formata-ai/config.php`, aponte `arquivo_autenticacao` para o arquivo que o hub usa para exigir login. A partir daí, a página e a API só respondem a quem estiver logado. Com a sessão expirada, a interface mostra "Sessão do hub encerrada".
 
 O que a versão PHP precisa e garante:
-- **Requisitos:** PHP 7.4 ou superior com mbstring. Funciona com o limite de memória comum de hospedagem (128 MB). Testada em Apache com PHP 7.4 e 8.2 e no servidor embutido do PHP 8.3.
-- **Proteção das pastas:** o `.htaccess` do pacote bloqueia o acesso a `config.php`, `nucleo/` e `ferramentas/`. Se o servidor não for Apache (ou ignorar `.htaccess`), bloqueie essas pastas na configuração do servidor web.
+- **Requisitos:** PHP 5.6 ou superior com mbstring. Funciona com o limite de memória comum de hospedagem (128 MB).
+- **Versões testadas:** Apache com PHP 5.6, 7.0, 7.4 e 8.2, e o servidor embutido do PHP 8.3. A equivalência com o motor de referência foi conferida em PHP 5.6, 7.0, 7.4 e 8.3.
+- **Erros do servidor:** um erro fatal de PHP, por exemplo no arquivo de login do hub, não vira mais uma página em branco com "HTTP ERROR 500". A tela mostra o arquivo, a linha e a mensagem, sem caminhos de pastas. A API responde com `erro_servidor`.
+- **Proteção das pastas:** `nucleo/` e `ferramentas/` têm `.htaccess` que bloqueia o acesso pelo navegador. A raiz da ferramenta não tem `.htaccess`, porque linhas como `Options` e `Header` causam erro 500 em servidores que restringem esse arquivo. `config.php` não mostra nada se for aberto direto. Se o servidor não for Apache, bloqueie `nucleo/` e `ferramentas/` na configuração do servidor web. Depois que tudo funcionar, desative a página de diagnóstico com `diagnostico_ativo => false` em `config.php`.
 - **Tempo-limite:** é o `tempo_limite` de `config.php`. Ao estourar, a resposta é 504 com `tempo_esgotado`.
 - **Privacidade:** o arquivo enviado é lido e apagado na hora. O log de erros do PHP recebe só identificador, tamanho, código do resultado e duração.
 

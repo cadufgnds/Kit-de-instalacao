@@ -259,3 +259,49 @@ def test_sessao_expirada_e_explicada_no_navegador(hub, navegador, com_login):
     pg.click("#botao-formatar")
     playwright_api.expect(pg.locator("#status-titulo")).to_have_text("Sessão do hub encerrada")
     contexto.close()
+
+
+# --- Erros do servidor viram mensagens legíveis (em vez da página em branco "HTTP ERROR 500") ---
+
+
+def test_diagnostico_mostra_que_esta_tudo_certo(hub):
+    url, _ = hub
+    r = httpx.get(url + "/formata-ai/diagnostico.php", timeout=30)
+    assert r.status_code == 200
+    assert "Tudo certo" in r.text and "Teste de formatação" in r.text and "Falha</td>" not in r.text
+
+
+@pytest.fixture
+def login_quebrado(hub):
+    _, pasta = hub
+    (pasta / "includes" / "quebrado.php").write_text("<?php\nrequire 'conexao-que-nao-existe.php';\n", encoding="utf-8")
+    _configurar(pasta, arquivo_autenticacao="../includes/quebrado.php")
+    _esperar_opcache()
+    yield
+    _configurar(pasta, arquivo_autenticacao="")
+    _esperar_opcache()
+
+
+def test_erro_fatal_do_login_do_hub_vira_mensagem_legivel(hub, login_quebrado):
+    url, pasta = hub
+    pagina = httpx.get(url + "/formata-ai/", timeout=30)
+    assert pagina.status_code == 500
+    assert "O servidor encontrou um erro ao abrir a ferramenta." in pagina.text
+    assert "quebrado.php" in pagina.text and "conexao-que-nao-existe.php" in pagina.text
+    assert str(pasta) not in pagina.text  # sem caminhos completos de pastas
+    api = httpx.post(url + "/formata-ai/api/formatar.php", json={"texto": "# T"}, timeout=30)
+    assert api.status_code == 500 and api.json()["codigo"] == "erro_servidor"
+    diag = httpx.get(url + "/formata-ai/diagnostico.php", timeout=30)
+    assert diag.status_code == 200 and "Login do hub" in diag.text
+
+
+def test_diagnostico_aponta_arquivo_de_login_inexistente(hub):
+    url, pasta = hub
+    _configurar(pasta, arquivo_autenticacao="../includes/nao-existe.php")
+    _esperar_opcache()
+    try:
+        r = httpx.get(url + "/formata-ai/diagnostico.php", timeout=30)
+        assert "NÃO encontrado" in r.text and "item(ns) com falha" in r.text
+    finally:
+        _configurar(pasta, arquivo_autenticacao="")
+        _esperar_opcache()

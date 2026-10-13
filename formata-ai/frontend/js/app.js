@@ -19,7 +19,7 @@ const TITULO_SEM_API = "A API do Formata.AI não respondeu";
 const MENSAGEM_SEM_API =
   "A página foi aberta, mas a parte que formata os documentos não está disponível. " +
   "Confira se a pasta da ferramenta foi copiada inteira para o servidor (incluindo as pastas api e nucleo) " +
-  "e se o servidor executa PHP 7.4 ou superior.";
+  "e abra diagnostico.php, na mesma pasta, para ver o que falta no servidor.";
 const TITULO_SESSAO = "Sessão do hub encerrada";
 const MENSAGEM_SESSAO = "O hub pediu login de novo. Entre novamente no hub, volte a esta ferramenta e tente outra vez.";
 

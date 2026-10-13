@@ -22,10 +22,10 @@ PASTA = "formata-ai"
 DATA_FIXA = (2026, 1, 1, 0, 0, 0)
 
 CABECALHO_INDEX = """<?php
-// Formata.AI — página da ferramenta no hub. Gerado por backend/scripts/empacotar_php.py
+// Formata.AI — página da ferramenta. Gerado por backend/scripts/empacotar_php.py
 // a partir de frontend/index.html; edite o original e gere o pacote de novo.
-declare(strict_types=1);
-require __DIR__ . '/nucleo/api.php';
+require dirname(__FILE__) . '/nucleo/requisitos.php';
+require dirname(__FILE__) . '/nucleo/api.php';
 FormataApi\\exigir_autenticacao();
 header('Content-Type: text/html; charset=utf-8');
 FormataApi\\cabecalhos_seguranca();
@@ -44,7 +44,7 @@ def arquivos_do_pacote() -> dict[str, bytes]:
                 if caminho.is_file() and "__pycache__" not in caminho.parts:
                     arquivos[caminho.relative_to(origem).as_posix()] = caminho.read_bytes()
     arquivos["favicon.ico"] = (FRONTEND / "favicon.ico").read_bytes()
-    for nome in ("config.php", ".htaccess", "LEIA-ME.txt"):
+    for nome in ("config.php", "diagnostico.php", "LEIA-ME.txt"):
         arquivos[nome] = (PHP / nome).read_bytes()
 
     html = (FRONTEND / "index.html").read_text(encoding="utf-8")

@@ -11,8 +11,10 @@ descartado na hora.
 
 Requisitos do servidor
 ----------------------
-- PHP 7.4 ou superior (o mesmo que já roda o hub).
+- PHP 5.6 ou superior (testado em 5.6, 7.0, 7.4, 8.2 e 8.3).
 - Extensão mbstring do PHP (vem ativa na maioria das hospedagens).
+
+Funciona dentro do hub ou sozinha, em qualquer site com PHP.
 
 
 Como instalar
@@ -30,10 +32,10 @@ Como instalar
          index.php
          ...
 
-3. Teste no navegador:
-       https://ENDERECO-DO-HUB/formata-ai/api/saude.php
-   Deve aparecer uma linha parecida com:
-       {"status":"ok","versao":"0.3.0","versao_diretrizes":"2.6"}
+3. Confira o servidor no navegador:
+       https://ENDERECO-DO-HUB/formata-ai/diagnostico.php
+   Deve aparecer "Tudo certo". Se aparecer algum item com "Falha", a própria
+   página explica o que falta. Envie uma foto dela ao responsável.
 
 4. Abra a ferramenta:
        https://ENDERECO-DO-HUB/formata-ai/
@@ -53,6 +55,15 @@ Mudanças em config.php podem levar alguns segundos para valer (cache do PHP).
 
 Problemas comuns
 ----------------
+"Esta página não está funcionando — HTTP ERROR 500" (página em branco)
+    O PHP do servidor parou com um erro. Abra formata-ai/diagnostico.php e
+    envie uma foto da página. Se o diagnóstico também não abrir, o servidor
+    não está executando PHP nessa pasta.
+
+"O servidor encontrou um erro ao abrir a ferramenta"
+    A mensagem vermelha diz em qual arquivo e linha. Se citar um arquivo do
+    hub (por exemplo, o de login), confira 'arquivo_autenticacao' em config.php.
+
 "A API do Formata.AI não respondeu"
     A pasta foi copiada incompleta (faltam api ou nucleo) ou o servidor não
     está executando PHP nessa pasta. Refaça o passo 2 e teste o passo 3.
@@ -60,9 +71,9 @@ Problemas comuns
 "Sessão do hub encerrada"
     O login do hub expirou. Entre de novo no hub e volte à ferramenta.
 
-O teste do passo 3 mostra "requisito_ausente"
-    O servidor precisa de PHP 7.4+ com mbstring. Peça ao responsável pela
-    hospedagem para ativar.
+O diagnóstico mostra falha na versão do PHP ou na mbstring
+    Peça ao responsável pela hospedagem para atualizar o PHP (5.6 ou
+    superior) ou ativar a extensão mbstring.
 
 Arquivo .docx recusado
     Ainda não é aceito. Copie o texto e cole na página, ou salve o documento
@@ -77,3 +88,4 @@ tempo_limite          segundos por formatação (padrão: 15)
 arquivo_autenticacao  login do hub (veja acima)
 registrar_log         registra no log do PHP só tamanho, resultado e duração;
                       nunca o conteúdo dos documentos
+diagnostico_ativo     liga ou desliga a página diagnostico.php

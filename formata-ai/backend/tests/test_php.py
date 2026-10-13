@@ -7,7 +7,9 @@ Pulado quando o executável `php` não está disponível.
 """
 
 import json
+import os
 import random
+import shlex
 import shutil
 import subprocess
 from pathlib import Path
@@ -19,7 +21,9 @@ from formata import formatar
 from test_regressao import _documento_aleatorio
 from util import bloco, documento
 
-PHP = shutil.which("php")
+# FORMATA_PHP_CMD permite outra versão do PHP, por exemplo dentro de um contêiner:
+#   FORMATA_PHP_CMD="docker run --rm -i -v $PWD/..:$PWD/.. php:5.6-apache php"
+PHP = os.environ.get("FORMATA_PHP_CMD") or shutil.which("php")
 CLI = Path(__file__).resolve().parents[2] / "php" / "ferramentas" / "formatar_cli.php"
 FIXTURE = Path(__file__).parent / "fixtures" / "kit_unico_v13.md"
 
@@ -28,7 +32,7 @@ pytestmark = pytest.mark.skipif(PHP is None, reason="php não instalado")
 
 def _php(pedidos):
     proc = subprocess.run(
-        [PHP, "-d", "memory_limit=1G", str(CLI)],
+        [*shlex.split(PHP), "-d", "memory_limit=1G", str(CLI)],
         input=json.dumps(pedidos, ensure_ascii=False).encode("utf-8"),
         capture_output=True,
         check=False,
