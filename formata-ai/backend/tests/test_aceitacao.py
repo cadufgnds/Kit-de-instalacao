@@ -52,7 +52,7 @@ def test_multiplos_titulos_com_colagem_hierarquica():
 def test_primeiro_bloco_maior_que_34_linhas():
     r = formatar(documento(bloco("## Documento", 50), bloco("## Seção", 30)))
     assert lista(r) == [
-        "- Pág 2 | `## Documento` | Tam 50 | 50 > 34, primeiro bloco sem quebra; 74 − 50 = 24 | SEGUE",
+        "- Pág 2 | `## Documento` | Tam 50 | 50 > 34; 74 − 50 = 24 | SEGUE",
         "- Pág 3 | `## Seção` | Tam 30 | 30 > 24; 40 − 30 = 10 | QUEBRA",
     ]
     assert quebras(r) == [titulo("## Seção", quebra=True)]
@@ -81,13 +81,13 @@ def test_bloco_maior_que_40_segue_quando_restante_permite():
 
 def test_bloco_maior_que_40_quebra_quando_restante_menor_que_8():
     r = formatar(documento(bloco("## Doc", 30), bloco("## Longo", 45)))
-    assert lista(r)[1] == "- Pág 3 | `## Longo` | Tam 45 | 45 > 4; 4 < 8; 80 − 45 = 35 | QUEBRA"
+    assert lista(r)[1] == "- Pág 3 | `## Longo` | Tam 45 | 45 > 4; 80 − 45 = 35 | QUEBRA"
     assert quebras(r) == [titulo("## Longo", quebra=True)]
 
 
 def test_bloco_maior_que_40_quebra_quando_nao_cabe_em_restante_mais_40():
     r = formatar(documento(bloco("## Doc", 14), bloco("## Longo", 75)))
-    assert lista(r)[1] == "- Pág 3 | `## Longo` | Tam 75 | 75 > 20; 75 > 60; 80 − 75 = 5 | QUEBRA"
+    assert lista(r)[1] == "- Pág 3 | `## Longo` | Tam 75 | 75 > 20; 80 − 75 = 5 | QUEBRA"
     assert len(quebras(r)) == 1
 
 
@@ -95,7 +95,7 @@ def test_restante_negativo_avanca_pagina_adicional():
     r = formatar(documento(bloco("## Doc", 30), bloco("## Enorme", 110), bloco("## Depois", 5)))
     assert lista(r) == [
         "- Pág 1 | `## Doc` | Tam 30 | 34 − 30 = 4 | FICA",
-        "- Pág 4 | `## Enorme` | Tam 110 | 110 > 4; 4 < 8; 80 − 110 = −30; −30 + 40 = 10 | QUEBRA",
+        "- Pág 4 | `## Enorme` | Tam 110 | 110 > 4; 80 − 110 + 40 = 10 | QUEBRA",
         "- Pág 4 | `## Depois` | Tam 5 | 10 − 5 = 5 | FICA",
     ]
 

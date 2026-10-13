@@ -34,6 +34,10 @@ def paginar(blocos: list[tuple[str, int]]) -> list[ItemPaginacao]:
     Restante começa em 34. O primeiro bloco nunca leva quebra: se passar de
     34, é SEGUE. Um Restante negativo soma 40 e avança uma página até deixar
     de ser negativo (regra 4).
+
+    Conta nos casos sem exemplo na seção 5.4 (decisão D2, formato enxuto):
+    só a comparação principal e o cálculo final, com as páginas somadas pela
+    regra 4 incluídas no cálculo: "110 > 4; 80 − 110 + 40 = 10".
     """
     itens: list[ItemPaginacao] = []
     pagina = 1
@@ -44,6 +48,7 @@ def paginar(blocos: list[tuple[str, int]]) -> list[ItemPaginacao]:
             raise ValueError(f"Bloco {indice} com Tam {tam}: todo bloco tem ao menos uma linha.")
         anterior = restante
         inicio = pagina
+        aplica_regra_4 = False  # só o primeiro SEGUE e a QUEBRA acima de 40 podem dar negativo
         if tam <= restante:
             resultado = R.FICA
             novo = restante - tam
@@ -53,7 +58,8 @@ def paginar(blocos: list[tuple[str, int]]) -> list[ItemPaginacao]:
             base = restante + pag_cheia
             novo = base - tam
             pagina += 1
-            conta = f"{tam} > {restante}, primeiro bloco sem quebra; {base} − {tam} = {numero(novo)}"
+            conta = f"{tam} > {restante}; {base} − {tam}"
+            aplica_regra_4 = True
         elif tam <= pag_cheia:
             resultado = R.QUEBRA
             novo = pag_cheia - tam
@@ -72,15 +78,17 @@ def paginar(blocos: list[tuple[str, int]]) -> list[ItemPaginacao]:
             novo = base - tam
             inicio = pagina + 1
             pagina += 2
-            if restante < R.RESTANTE_MINIMO_SEGUE:
-                motivo = f"{restante} < {R.RESTANTE_MINIMO_SEGUE}"
-            else:
-                motivo = f"{tam} > {restante + pag_cheia}"
-            conta = f"{tam} > {restante}; {motivo}; {base} − {tam} = {numero(novo)}"
-        while novo < 0:
-            conta += f"; {numero(novo)} + {pag_cheia} = {numero(novo + pag_cheia)}"
-            novo += pag_cheia
-            pagina += 1
+            conta = f"{tam} > {restante}; {base} − {tam}"
+            aplica_regra_4 = True
+        if aplica_regra_4:
+            avancos = 0
+            while novo < 0:
+                novo += pag_cheia
+                pagina += 1
+                avancos += 1
+            if avancos:
+                conta += f" + {avancos * pag_cheia}"
+            conta += f" = {numero(novo)}"
         restante = novo
         itens.append(ItemPaginacao(indice, rotulo, tam, anterior, novo, inicio, pagina, resultado, conta))
     return itens

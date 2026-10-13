@@ -4,7 +4,7 @@ Gerado em 13/10/2026 por `scripts/gerar_relatorio.py`, contra as Diretrizes Form
 
 ## Suíte automatizada
 
-Resultado: **814 passed in 5.61s**
+Resultado: **814 passed in 4.97s**
 
 | Arquivo | O que cobre | Passou | Falhou |
 |---|---|---|---|
@@ -65,7 +65,7 @@ Modo `markdown` · 12 parágrafos · 0 quebra(s) no HTML · 2 linha(s) removida(
 
 ```text
 Paginação:
-- Pág 2 | `## Abertura` | Tam 50 | 50 > 34, primeiro bloco sem quebra; 74 − 50 = 24 | SEGUE
+- Pág 2 | `## Abertura` | Tam 50 | 50 > 34; 74 − 50 = 24 | SEGUE
 - Pág 3 | `## Seção` | Tam 30 | 30 > 24; 40 − 30 = 10 | QUEBRA
 ```
 
@@ -114,7 +114,7 @@ Modo `markdown` · 70 parágrafos · 0 quebra(s) no HTML · 1 linha(s) removida(
 ```text
 Paginação:
 - Pág 1 | `## Abertura` | Tam 30 | 34 − 30 = 4 | FICA
-- Pág 3 | `## Longo` | Tam 45 | 45 > 4; 4 < 8; 80 − 45 = 35 | QUEBRA
+- Pág 3 | `## Longo` | Tam 45 | 45 > 4; 80 − 45 = 35 | QUEBRA
 ```
 
 Modo `markdown` · 75 parágrafos · 1 quebra(s) no HTML · 1 linha(s) removida(s) · verificações: aprovadas
@@ -126,7 +126,7 @@ Modo `markdown` · 75 parágrafos · 1 quebra(s) no HTML · 1 linha(s) removida(
 ```text
 Paginação:
 - Pág 1 | `## Abertura` | Tam 30 | 34 − 30 = 4 | FICA
-- Pág 4 | `## Enorme` | Tam 110 | 110 > 4; 4 < 8; 80 − 110 = −30; −30 + 40 = 10 | QUEBRA
+- Pág 4 | `## Enorme` | Tam 110 | 110 > 4; 80 − 110 + 40 = 10 | QUEBRA
 - Pág 4 | `## Depois` | Tam 5 | 10 − 5 = 5 | FICA
 ```
 
@@ -301,5 +301,5 @@ Paginação:
 - Pág 15 | `## Tamanho da reescrita` | Tam 4 | 4 − 4 = 0 | FICA
 - Pág 16 | `# LIMITE COMUM AOS TRÊS PILARES` | Tam 11 | 11 > 0; 40 − 11 = 29 | QUEBRA
 - Pág 16 | `## Divergências: sempre fora do documento` | Tam 22 | 29 − 22 = 7 | FICA
-- Pág 18 | `# VERIFICAÇÃO ANTES DE ENTREGAR` | Tam 53 | 53 > 7; 7 < 8; 80 − 53 = 27 | QUEBRA
+- Pág 18 | `# VERIFICAÇÃO ANTES DE ENTREGAR` | Tam 53 | 53 > 7; 80 − 53 = 27 | QUEBRA
 ```

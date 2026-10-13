@@ -41,7 +41,7 @@ Paginação:
 - Pág 15 | `## Tamanho da reescrita` | Tam 4 | 4 − 4 = 0 | FICA
 - Pág 16 | `# LIMITE COMUM AOS TRÊS PILARES` | Tam 11 | 11 > 0; 40 − 11 = 29 | QUEBRA
 - Pág 16 | `## Divergências: sempre fora do documento` | Tam 22 | 29 − 22 = 7 | FICA
-- Pág 18 | `# VERIFICAÇÃO ANTES DE ENTREGAR` | Tam 53 | 53 > 7; 7 < 8; 80 − 53 = 27 | QUEBRA
+- Pág 18 | `# VERIFICAÇÃO ANTES DE ENTREGAR` | Tam 53 | 53 > 7; 80 − 53 = 27 | QUEBRA
 
 ```
 <p>Memorize as diretrizes abaixo como referência normativa desta conversa. Elas detalham as regras de Formatação, Semântica e Linguagem do texto-base e devem ser efetivamente aplicadas. Onde o texto-base for genérico, siga este Kit; em conflito direto, o texto-base prevalece. Confirme com a linha "Kit Único v13 (09/09/2026) instalado." e, na mesma resposta, logo abaixo dela, entregue o documento já reescrito. Nunca encerre o turno só confirmando.</p>

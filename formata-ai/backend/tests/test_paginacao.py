@@ -33,12 +33,12 @@ def test_primeiro_bloco_que_cabe_fica():
 
 
 def test_primeiro_bloco_maior_que_34_segue_sem_quebra():
-    assert _resumo(_decidir(35)) == [(2, 35, "35 > 34, primeiro bloco sem quebra; 74 − 35 = 39", "SEGUE")]
+    assert _resumo(_decidir(35)) == [(2, 35, "35 > 34; 74 − 35 = 39", "SEGUE")]
 
 
 def test_primeiro_bloco_maior_que_74_avanca_paginas_regra_4():
     assert _resumo(_decidir(100)) == [
-        (3, 100, "100 > 34, primeiro bloco sem quebra; 74 − 100 = −26; −26 + 40 = 14", "SEGUE")
+        (3, 100, "100 > 34; 74 − 100 + 40 = 14", "SEGUE")
     ]
 
 
@@ -66,25 +66,25 @@ def test_segue_no_limite_restante_8():
 
 def test_quebra_quando_restante_7_mesmo_com_bloco_maior_que_40():
     # 34 − 27 = 7 < 8 → QUEBRA: abre a página seguinte e termina na outra.
-    assert _resumo(_decidir(27, 41))[1] == (3, 41, "41 > 7; 7 < 8; 80 − 41 = 39", "QUEBRA")
+    assert _resumo(_decidir(27, 41))[1] == (3, 41, "41 > 7; 80 − 41 = 39", "QUEBRA")
 
 
 def test_quebra_quando_bloco_passa_de_restante_mais_40():
     # Restante 20, Tam 61 > 60 → QUEBRA.
-    assert _resumo(_decidir(14, 61))[1] == (3, 61, "61 > 20; 61 > 60; 80 − 61 = 19", "QUEBRA")
+    assert _resumo(_decidir(14, 61))[1] == (3, 61, "61 > 20; 80 − 61 = 19", "QUEBRA")
 
 
 def test_quebra_de_bloco_gigante_avanca_paginas_regra_4():
     item = _decidir(30, 130)[1]
     assert (item.pagina_inicio, item.pagina) == (2, 5)
-    assert item.conta == "130 > 4; 4 < 8; 80 − 130 = −50; −50 + 40 = −10; −10 + 40 = 30"
+    assert item.conta == "130 > 4; 80 − 130 + 80 = 30"
     assert item.restante_novo == 30
 
 
 def test_quebra_que_preenche_paginas_exatas_termina_com_restante_zero():
     item = _decidir(30, 120)[1]
     assert (item.pagina, item.restante_novo) == (4, 0)
-    assert item.conta.endswith("80 − 120 = −40; −40 + 40 = 0")
+    assert item.conta.endswith("80 − 120 + 40 = 0")
 
 
 def test_segue_maximo_no_restante_mais_40():
