@@ -1,0 +1,338 @@
+Paginação:
+- Pág 1 | `# KIT ÚNICO — FORMATAÇÃO, SEMÂNTICA E LINGUAGEM (v13, 09/09/2026)` | Tam 24 | 34 − 24 = 10 | FICA
+- Pág 1 | `# PARTE 1 — FORMATAÇÃO` | Tam 9 | 10 − 9 = 1 | FICA
+- Pág 2 | `## Hierarquia e numeração` | Tam 2 | 2 > 1; 40 − 2 = 38 | QUEBRA
+- Pág 2 | `# Título do documento` | Tam 9 | 38 − 9 = 29 | FICA
+- Pág 2 | `## Parágrafos` | Tam 7 | 29 − 7 = 22 | FICA
+- Pág 2 | `## Listas` | Tam 22 | 22 − 22 = 0 | FICA
+- Pág 3 | `## Tabelas e imagens` | Tam 7 | 7 > 0; 40 − 7 = 33 | QUEBRA
+- Pág 3 | `## Continuidade` | Tam 14 | 33 − 14 = 19 | FICA
+- Pág 3 | `# PARTE 2 — SEMÂNTICA` | Tam 7 | 19 − 7 = 12 | FICA
+- Pág 4 | `## Títulos: o que fazer` | Tam 44 | 12 ≥ 8 e 44 ≤ 52; 52 − 44 = 8 | SEGUE
+- Pág 4 | `## Títulos: o que nunca fazer` | Tam 8 | 8 − 8 = 0 | FICA
+- Pág 5 | `## Aderência entre título e corpo` | Tam 13 | 13 > 0; 40 − 13 = 27 | QUEBRA
+- Pág 5 | `## Quando abrir ou não abrir uma seção` | Tam 23 | 27 − 23 = 4 | FICA
+- Pág 6 | `## Bloco de abertura, resumo do processo` | Tam 37 | 37 > 4; 40 − 37 = 3 | QUEBRA
+- Pág 7 | `## Como montar a busca natural em camadas` | Tam 16 | 16 > 3; 40 − 16 = 24 | QUEBRA
+- Pág 7 | `### 2. Situação do cliente` | Tam 6 | 24 − 6 = 18 | FICA
+- Pág 7 | `### 3. Ação operacional` | Tam 6 | 18 − 6 = 12 | FICA
+- Pág 7 | `### 4. Sistema, tela ou fluxo` | Tam 5 | 12 − 5 = 7 | FICA
+- Pág 7 | `### 5. Regra, prazo, cobrança ou condição` | Tam 5 | 7 − 5 = 2 | FICA
+- Pág 8 | `### 6. Variação natural` | Tam 10 | 10 > 2; 40 − 10 = 30 | QUEBRA
+- Pág 8 | `### Como usar o resultado` | Tam 19 | 30 − 19 = 11 | FICA
+- Pág 8 | `## Siglas e termos` | Tam 8 | 11 − 8 = 3 | FICA
+- Pág 9 | `## Perguntas frequentes` | Tam 26 | 26 > 3; 40 − 26 = 14 | QUEBRA
+- Pág 9 | `## Como corrigir uma seção desalinhada` | Tam 8 | 14 − 8 = 6 | FICA
+- Pág 10 | `# PARTE 3 — LINGUAGEM` | Tam 16 | 16 > 6; 40 − 16 = 24 | QUEBRA
+- Pág 10 | `## Onde a riqueza é ganha de verdade` | Tam 22 | 24 − 22 = 2 | FICA
+- Pág 11 | `### Densidade alta é folga para gastar` | Tam 10 | 10 > 2; 40 − 10 = 30 | QUEBRA
+- Pág 11 | `## Termos que nunca variam` | Tam 12 | 30 − 12 = 18 | FICA
+- Pág 12 | `## Onde variar` | Tam 19 | 19 > 18; 40 − 19 = 21 | QUEBRA
+- Pág 12 | `## Como decidir cada substituição` | Tam 9 | 21 − 9 = 12 | FICA
+- Pág 13 | `## Padrão de redação` | Tam 23 | 23 > 12; 40 − 23 = 17 | QUEBRA
+- Pág 14 | `# PARTE 4 — DOCUMENTOS IT` | Tam 24 | 24 > 17; 40 − 24 = 16 | QUEBRA
+- Pág 14 | `## Passos e telas` | Tam 11 | 16 − 11 = 5 | FICA
+- Pág 15 | `## Leitura das capturas de tela` | Tam 20 | 20 > 5; 40 − 20 = 20 | QUEBRA
+- Pág 15 | `## Posição e forma das imagens` | Tam 16 | 20 − 16 = 4 | FICA
+- Pág 15 | `## Tamanho da reescrita` | Tam 4 | 4 − 4 = 0 | FICA
+- Pág 16 | `# LIMITE COMUM AOS TRÊS PILARES` | Tam 33 | 33 > 0; 40 − 33 = 7 | QUEBRA
+- Pág 18 | `# VERIFICAÇÃO ANTES DE ENTREGAR` | Tam 53 | 53 > 7; 7 < 8; 80 − 53 = 27 | QUEBRA
+
+```
+<p>Memorize as diretrizes abaixo como referência normativa desta conversa. Elas detalham as regras de Formatação, Semântica e Linguagem do texto-base e devem ser efetivamente aplicadas. Onde o texto-base for genérico, siga este Kit; em conflito direto, o texto-base prevalece. Confirme com a linha "Kit Único v13 (09/09/2026) instalado." e, na mesma resposta, logo abaixo dela, entregue o documento já reescrito. Nunca encerre o turno só confirmando.</p>
+<p><strong># KIT ÚNICO — FORMATAÇÃO, SEMÂNTICA E LINGUAGEM (v13, 09/09/2026)</strong></p>
+<p>Este Kit reúne os três pilares avaliados. Aplique todos em toda reescrita, na ordem de peso: Formatação vale 55 pontos, Linguagem 30 e Semântica 15.</p>
+<p>Além dos três pilares, o documento reescrito precisa ser recuperável por trecho: a base é consultada por busca, e o operador recebe o trecho recuperado, não o documento inteiro. As regras de recuperação aparecem nas Partes 2 e 3 e no Limite comum.</p>
+<p><strong>## Antes de reescrever: PR ou IT</strong></p>
+<p>Identifique o tipo do documento pelo nome do arquivo recebido, antes de qualquer análise.</p>
+<p>Nome que traga PR, ou que descreva um processo comercial ou de atendimento, é PR: siga as Partes 1 a 3.</p>
+<p>Nome que traga IT, Instrução de Trabalho ou passo a passo em sistema é IT: siga as Partes 1 a 3 mais a Parte 4, que prevalece onde for mais específica.</p>
+<p>Sem indicativo no nome do arquivo, não presuma. Pergunte ao usuário, em uma linha, se o conteúdo deve ser tratado como PR ou como IT, e só comece a reescrita depois da resposta. Nunca deduza o tipo pelo conteúdo, pela presença de imagens nem pelo formato do original: PR mal formatada se parece com IT, e IT sem print se parece com PR.</p>
+<p>---</p>
+<p><strong># PARTE 1 — FORMATAÇÃO</strong></p>
+<p><strong>## O que o avaliador mede</strong></p>
+<p>A nota de Formatação é a média ponderada de duas medidas: extração e estrutura. Documento com extração deficiente é penalizado com peso dobrado, então ela é a parte mais cara de errar.</p>
+<p>Extração mede quanto de cada página é texto útil. Imagem, tabela não extraída, separador decorativo e área vazia derrubam o índice.</p>
+<p>Estrutura começa em 100 e desconta por hierarquia de títulos fora de ordem, títulos longos demais, parágrafos longos e assunto quebrado no meio.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>## Hierarquia e numeração</strong></p>
+<p>Use somente estes três níveis:</p>
+<p><strong># Título do documento</strong></p>
+<p><strong>## 1. Seção principal</strong></p>
+<p><strong>### 1.1 Tópico específico</strong></p>
+<p>O `#` do título não recebe número. As `##` são numeradas 1, 2, 3. Os `###` são numerados 1.1, 1.2, 2.1. Nunca use `####` nem salte de nível.</p>
+<p>Duas exceções à numeração: a 1ª `##` do documento, que funciona como resumo do processo, não recebe número, imediatamente abaixo do `#`; e as perguntas do FAQ são `###` sem numeração, com a `##` do FAQ mantendo a dela.</p>
+<p>Nunca crie `##` para regra isolada ou parágrafo solto.</p>
+<p><strong>## Parágrafos</strong></p>
+<p>Cada parágrafo em uma única linha física de Markdown, com até aproximadamente 350 caracteres.</p>
+<p>De 1 a 3 parágrafos por `###`, cada um com uma ideia principal. Nunca misture procedimentos independentes no mesmo parágrafo.</p>
+<p>Abra cada `###` com frase curta. Parágrafo longo logo após o título aumenta o risco de o cabeçalho ficar isolado do conteúdo na conversão.</p>
+<p><strong>## Listas</strong></p>
+<p>De 2 a 6 itens. Apresente a condição ou unidade comum uma única vez em rótulo negrito na linha imediatamente anterior à lista, deixando em cada item apenas o que o diferencia:</p>
+<p><strong>**Valores com validade de 30 dias**</strong></p>
+<p>- R$ 15</p>
+<p>- R$ 17</p>
+<p>- R$ 20</p>
+<p>Não repita "validade de 30 dias" em cada item. Agrupe só itens com exatamente a mesma condição. Condição diferente exige novo rótulo e novo grupo: divida o bloco quando mudar prazo, taxa, público, produto ou consequência.</p>
+<p>Para pares de dados, declare o contexto uma vez no rótulo e deixe em cada item só os valores:</p>
+<p>    <strong>**Crédito antecipado — valor e taxa de conveniência**</strong></p>
+<p>    - R$ 1,00 — R$ 0,39</p>
+<p>    - R$ 1,49 — R$ 0,59</p>
+<p>Essa compactação é obrigatória quando a riqueza estiver abaixo de 34%: lista longa com a mesma unidade repete os mesmos lemas e derruba o índice sem acrescentar informação.</p>
+<p>Nunca transforme linha de lista em cabeçalho Markdown.</p>
+<p>Todo `###` com lista precisa de ao menos um parágrafo explicativo além da frase de introdução. Cabeçalho sustentado só por introdução e lista pontua mal em Semântica.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>## Tabelas e imagens</strong></p>
+<p>Nunca use tabela na reescrita. Converta em texto corrido, lista ou blocos de rótulo e valor, sem perder nenhuma célula de dado.</p>
+<p>Nunca insira imagem, print ou separador decorativo. Descreva em texto o que a imagem mostrava, no ponto onde ela aparecia.</p>
+<p>Nunca deixe linha em branco além da que separa blocos. Área sem texto é penalizada na extração, que pesa dobrado.</p>
+<p><strong>## Continuidade</strong></p>
+<p>Cada página deve começar com um cabeçalho real. Página que inicia com texto comum conta como falha de continuidade.</p>
+<p>O que está sob seu controle no Markdown: nunca use "### Continuação" nem qualquer marcador artificial de página, HTML, CSS ou quebra manual; nunca insira parágrafo entre uma `##` e seu primeiro `###`; mantenha o rótulo em negrito na linha imediatamente anterior à lista que ele introduz, nunca separado dela.</p>
+<p>Um `###` e todo o seu conteúdo formam um bloco indivisível. Se um tópico puder ultrapassar uma página inteira, divida-o antes em `###` menores, reais e semanticamente distintos — nunca em fatias arbitrárias do mesmo assunto.</p>
+<p>O restante depende da conversão para PDF, não do Markdown: a quebra é decidida pelo gerador, e a garantia vem das regras de CSS do conversor (`break-after: avoid` em títulos, `break-inside: avoid` em listas). Não tente compensar isso no texto.</p>
+<p>---</p>
+<p><strong># PARTE 2 — SEMÂNTICA</strong></p>
+<p><strong>## O que o avaliador mede</strong></p>
+<p>O avaliador compara o título de cada seção com a prosa que vem até o próximo cabeçalho. Título vago, ou conteúdo que não corresponde ao título, recebe aderência baixa mesmo quando o texto está correto.</p>
+<p>As seções que mais perdem pontos são as curtas e as que só listam itens: pouco texto significa poucas palavras para casar com o título.</p>
+<p><strong>## Títulos: o que fazer</strong></p>
+<p>Nomeie o assunto, a ação, a condição ou o público realmente tratado no bloco. O título deve permitir identificar de imediato qual regra, procedimento, produto ou situação está ali.</p>
+<p>Título de `##` e de `###` tem no máximo 8 palavras, sem pontuação final, nomeando assunto, condição, público ou, em procedimento, a ação — nunca a pergunta do operador: perguntas ficam reservadas ao FAQ, na Parte 2.</p>
+<p>Título genérico anula a recuperação por trecho tanto quanto pergunta genérica anularia: ele precisa conter o elemento que separa este bloco dos vizinhos, e não apenas o tema do documento repetido.</p>
+<p>O teste é direto: se o título puder ser colado sobre outro `###` do mesmo documento sem ficar errado, ele é genérico e se reescreve com o que distingue o bloco: a condição de entrada, o público ou segmento, o sistema, o canal ou o estado de falha.</p>
+<p>Nunca use como título Visão Geral, Definições, Informações Gerais, Considerações, Orientações e equivalentes, mesmo com o tema junto ([Tema] — Visão Geral); fórmula repetida em todos os `###` do documento é o mesmo defeito com outra roupagem.</p>
+<p>Genérico e específico, no mesmo documento de Informe de Pagamento:</p>
+<p>    Genérico: Regras do Informe de Pagamento</p>
+<p>    Específico: Elegibilidade por fatura e bloqueio ativo</p>
+<p>    Genérico: Atendimento ao cliente que recusa</p>
+<p>    Específico: Recusa do cliente Vivo Next ao App Vivo</p>
+<p>    Genérico: Prazos do procedimento</p>
+<p>    Específico: Prazo de desbloqueio e de Baixa Bancária</p>
+<p>    Genérico: Execução do registro</p>
+<p>    Específico: Registro do Informe de Pagamento no fluxo GPS</p>
+<p>    Genérico: Serviço não normalizado</p>
+<p>    Específico: Bloqueio persistente após o Informe de Pagamento</p>
+<p>Curto e específico ao mesmo tempo: pergunta longa derruba a nota de estrutura, pergunta vaga derruba a de semântica.</p>
+<p>Bons exemplos de `###`, cada um trazendo o próprio qualificador:</p>
+<p>- Prazo de bloqueio do faturamento suspenso</p>
+<p>- Responsável autorizado a solicitar a desconexão</p>
+<p>- Limite de valor no cancelamento pela URA</p>
+<p>- Cancelamento por ordem judicial sem validação de segurança</p>
+<p>Nunca abra todos os títulos com a mesma estrutura sintática. Uma sequência inteira de substantivo + preposição + mesmo padrão repete o mesmo lema no denominador da riqueza e apaga a diferença entre os blocos.</p>
+<p>Cada título tem um assunto central. Não una finalidade, elegibilidade, canais e prazos no mesmo cabeçalho: são regras independentes e viram tópicos próprios.</p>
+<p>Nome oficial, sigla e título obrigatório são preservados. Complemente-os com contexto quando isso não alterar o nome formal: `Vivo Easy — prazo de portabilidade` mantém o nome e diz do que a seção trata.</p>
+<p>Em bloco de procedimento, o título nomeia a ação executada: `Registro do Informe de Pagamento no App`, não `Diretriz operacional`.</p>
+<p><strong>## Títulos: o que nunca fazer</strong></p>
+<p>Nunca use títulos genéricos ou estruturais: Visão Geral, Definições, Informações Gerais, Considerações, Orientações, Detalhes, Diversos, Outros, Geral, Continuação.</p>
+<p>A proibição vale mesmo com o tema junto. "Cancelamento de Produtos — Visão Geral" é tão proibido quanto "Visão Geral" sozinho: acrescentar o nome do tema não torna o título específico.</p>
+<p>Não inicie todos os títulos com a mesma fórmula (Regra de, Informações sobre, Valores de). Não crie título artificial só para aumentar a quantidade de seções.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>## Aderência entre título e corpo</strong></p>
+<p>A primeira frase do bloco retoma os substantivos-chave do título e desenvolve diretamente o tema anunciado. É o que mais eleva a aderência medida.</p>
+<p>Mantenha na mesma seção apenas regras, condições, etapas e consequências relacionadas ao título. Não repita palavras do título como preenchimento: a aderência tem que vir do assunto realmente explicado.</p>
+<p>O bloco não depende de outro para ser entendido. Retomada anafórica ou remissão que aponte para fora do `###` é substituída pelo nome da entidade, do sistema, do canal ou da condição a que se refere. O operador recebe o trecho recuperado sozinho, e ele precisa identificar o assunto sem o bloco vizinho.</p>
+<p>Quando a remissão for necessária, ela cita o título exato do `###` de destino. Remissão genérica ao fluxo vigente, ao procedimento previsto ou à orientação aplicável é reescrita com o destino que o original define.</p>
+<p><strong>## Quando abrir ou não abrir uma seção</strong></p>
+<p>Abra novo `###` ao mudar assunto, público, sistema, condição, etapa ou procedimento.</p>
+<p>Não abra quando o assunto não sustentar ao menos três frases: incorpore ao `###` vizinho.</p>
+<p>Também não abra novo `###` para continuar uma resposta. Um `###` em forma de pergunta entrega a resposta inteira: condição de entrada, passos, ramos de falha, prazo e registro. Quando essa resposta não couber em 3 parágrafos, o bloco cresce até caber, e o limite de parágrafos cede.</p>
+<p>Dividir a resposta entre dois `###` é a causa mais comum de recuperação parcial: a busca traz um dos dois, e o operador recebe metade do procedimento. Fraseologia de apoio, argumentário e variação de canal ficam dentro do bloco que responde à pergunta, não em blocos vizinhos que competem com ele na busca. Blocos de uma ou duas linhas são a principal causa de aderência próxima de zero — um documento com 75 títulos em 11 páginas tem títulos demais, não organização demais.</p>
+<p>Seção curta também custa riqueza: cada uma reabre repetindo o objeto, o responsável e a condição. Se mais de um terço dos blocos ficar abaixo de 300 caracteres, junte os do mesmo assunto antes de entregar.</p>
+<p>Cada `##` agrupa de 3 a 6 `###`, com a única exceção do Resumo operacional, que não tem `###`. Nunca separe a condição do seu efeito.</p>
+<p>Dentro de um `###` em forma de pergunta, a condição de entrada e o passo a passo ficam juntos: quem faz a pergunta precisa da resposta inteira, e separá-los produz exatamente a recuperação parcial que este Kit combate. A separação entre `##` de regras e `##` de execução continua valendo no nível da seção.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>## Bloco de abertura, resumo do processo</strong></p>
+<p>Esta seção vale para PR. Em IT, a abertura segue a Parte 4, que usa outra construção.</p>
+<p>A primeira `##` do documento existe em todo PR, sem número, logo abaixo do `#`. Ela tem de 6 a 10 linhas de prosa conectada e responde sozinha como o processo funciona.</p>
+<p>A ordem é fixa e narrativa: o que o procedimento faz, quem é elegível, o caminho principal com o desfecho, os prazos. Cada linha encadeia com a anterior por condição ou consequência.</p>
+<p>Não é sumário, índice nem pilha de fatos soltos. Linha isolada, sem ligação com a de cima, transforma o bloco em lista de tópicos e derruba a densidade sem ajudar quem lê. Detalhe que só existe no corpo fica no corpo.</p>
+<p>O título dessa `##` segue a regra de título específico da Parte 2: nomeia o processo com o vocabulário do próprio documento, nunca com o rótulo Resumo operacional, Resumo do processo, Visão Geral ou equivalente. Esses rótulos são genéricos por definição, cabem em qualquer PR e por isso não discriminam nada. Escreva o título como escreveria o de qualquer outro `##`, a partir do que o bloco realmente resume: em Informe de Pagamento, por exemplo, Desbloqueio por pagamento de fatura vencida.</p>
+<p>Por ser um bloco de linhas curtas, essa `##` não segue o limite de 350 caracteres por parágrafo nem o teto de 3 parágrafos por bloco, e é a única `##` sem `###`.</p>
+<p>Sem antecipar detalhe que só existe no corpo e sem inventar o que a fonte não traz.</p>
+<p>Feche esse bloco com um parágrafo, escrito uma única vez no documento, no formato: "Este documento também apoia no atendimento para [busca]; [busca]; [busca]." As três buscas ficam na mesma linha, separadas por ponto e vírgula, sem "ou".</p>
+<p>As três frases não repetem a mesma construção. Escrever todas no molde termo oficial seguido de com cliente e um gerúndio produz três variantes da mesma pergunta e cobre uma intenção só. Varie a forma: uma parte do termo oficial, outra do que o cliente relata, outra da ação que o operador precisa executar.</p>
+<p>Exemplo com as três construções diferentes, em documento de Informe de Pagamento:</p>
+<p>    Este documento também apoia no atendimento para informe de pagamento de fatura vencida com bloqueio ativo; cliente diz que pagou e o serviço continua bloqueado; como liberar o serviço enquanto a Baixa Bancária não sai.</p>
+<p>A verificação é direta: se as três começarem pelo mesmo tipo de palavra ou terminarem no mesmo tipo de oração, reescreva pelo menos duas.</p>
+<p>Metade das buscas da operação tem até 5 palavras, e as de até duas palavras falham o dobro. Por isso inclua nessas frases a sigla e a abreviação usadas no dia a dia e o nome dos sistemas citados no processo. Não invente termo ausente do original: o sinônimo vale só nessas frases; no resto do documento continuam valendo os termos fixos da Parte 3.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>## Como montar a busca natural em camadas</strong></p>
+<p>A busca natural representa como o operador procura uma informação durante o atendimento. Não confie apenas no título, no nome oficial do processo ou na redação formal do documento.</p>
+<p>Monte a busca em camadas, combinando nomenclatura oficial, fala do cliente, ação operacional, sistema, regra, exceção, sinônimo e abreviação. A consulta simulada é curta, objetiva e próxima da rotina de operação.</p>
+<p>A busca natural não substitui o termo oficial. O nome correto do processo, produto, serviço, sistema, canal, ação ou condição normativa é preservado no texto. Sinônimos e variações servem para testar a encontrabilidade, nunca para trocar a nomenclatura oficial.</p>
+<p><strong>### 1. Termo oficial</strong></p>
+<p>Use o nome do processo, serviço, produto, ação, sistema ou condição exatamente como aparece no documento. Testa se o conteúdo é encontrável pela nomenclatura correta.</p>
+<p>Exemplos: suspensão temporária fixa · cancelamento · portabilidade · troca de titularidade</p>
+<p><strong>### 2. Situação do cliente</strong></p>
+<p>Use palavras que o cliente poderia dizer e que o operador repetiria na busca. Testa se o documento conecta o relato do cliente ao procedimento correto.</p>
+<p>Exemplos: cliente quer pausar internet · cliente quer parar serviço por um tempo · cliente quer voltar com o serviço suspenso · cliente diz que continua cobrando um serviço suspenso</p>
+<p><strong>### 3. Ação operacional</strong></p>
+<p>Use a tarefa que o operador precisa executar no atendimento. Testa se o documento é recuperável pela ação prática, mesmo quando o operador não conhece o nome técnico do processo.</p>
+<p>Exemplos: incluir suspensão · retirar suspensão · registrar solicitação · cancelar pedido · consultar bloqueio · reativar serviço</p>
+<p><strong>### 4. Sistema, tela ou fluxo</strong></p>
+<p>Use o sistema, tela, caminho, ferramenta, fila ou fluxo citado no documento. Testa se o operador encontra o conteúdo a partir do ambiente em que está trabalhando.</p>
+<p>Exemplos: registrar no GPS · consultar no SAS · SmartWeb suspensão · onde registrar · como consultar bloqueio no Next</p>
+<p><strong>### 5. Regra, prazo, cobrança ou condição</strong></p>
+<p>Use dúvidas sobre limite, elegibilidade, prazo, cobrança, bloqueio, faturamento, exceção ou consequência. Testa se a regra é recuperável por uma pergunta prática.</p>
+<p>Exemplos: prazo máximo suspensão · cliente inadimplente pode pedir suspensão · fatura durante suspensão</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>### 6. Variação natural</strong></p>
+<p>Use variações corretas da operação: abreviação, sigla, forma reduzida do termo e pergunta incompleta. Testa se o documento é encontrável quando a busca vem curta ou informal.</p>
+<p>Exemplos: 2ª via · pro rata · eSIM · voltar serviço · pausa internet · consultar bloqueio</p>
+<p>Nunca use nesta camada palavra com erro de digitação, grafia errada ou termo sem acento, e nunca escreva nenhuma dessas formas no documento. Quando a falha vier daqui, a correção é incluir no texto a forma correta da abreviação ou da sigla que a operação usa.</p>
+<p><strong>### Como usar o resultado</strong></p>
+<p>Evite perguntas longas, formais ou muito bem pontuadas. A busca simulada tem poucas palavras e foco na informação que o operador precisa localizar.</p>
+<p>Para cada busca simulada, verifique três pontos: se a resposta existe no documento; se o documento contém termos próximos da pergunta natural; se há contexto suficiente para ligar a pergunta ao conteúdo correto.</p>
+<p>Encontrável: a resposta existe e a pergunta usa termos presentes ou equivalentes no documento. Nada a fazer.</p>
+<p>Parcialmente encontrável: a resposta existe, mas o documento só traz o termo oficial e não contempla a forma natural da pergunta. Inclua o vocabulário que falta nas frases de termos de busca do primeiro tópico ou no bloco correspondente.</p>
+<p>Não encontrável: falta termo, contexto ou resposta para ligar a pergunta ao conteúdo. Se a resposta existe no original, reorganize o bloco e nomeie a situação; se o original não trata do assunto, não invente — a lacuna não é sua para preencher.</p>
+<p>Nunca crie pergunta artificial só para favorecer o documento. Toda busca simulada representa uma intenção real de atendimento e está ligada a uma informação que o documento deveria responder.</p>
+<p>Esta análise é interna. Nunca mostre as buscas simuladas, os veredictos nem esta verificação na resposta: entregue apenas o documento reescrito.</p>
+<p><strong>## Siglas e termos</strong></p>
+<p>Explique apenas quando o significado constar do original, entre parênteses na primeira ocorrência, dentro do `###` onde o termo é usado: URA (Unidade de Resposta Audível).</p>
+<p>Se o original não traz o significado, mantenha a sigla sozinha. Nunca deduza nem crie a expansão.</p>
+<p>Cada termo aparece em uma forma só no documento inteiro: se o corpo diz "conferência a 3", o FAQ não diz "Conf3".</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>## Perguntas frequentes</strong></p>
+<p>A `##` do FAQ é numerada e tem o título qualificado pelo tema: "5. Perguntas Frequentes sobre Cancelamento de Produtos". Nunca "Perguntas Frequentes" isolado.</p>
+<p>A `##` do FAQ é exclusiva e contém só perguntas. Nunca junte outro assunto ao bloco nem ao título: "Exceções e perguntas frequentes" é proibido, e as exceções ficam em `##` própria. Passando de 6 perguntas, divida em mais de uma `##`, uma por tema.</p>
+<p>Cada pergunta vira `###` sem número. A resposta é um parágrafo operacional que retoma naturalmente o objeto da pergunta.</p>
+<p>Nunca deixe resposta solta como "Sim", "Não" ou "Consulte o sistema". Em vez de "Não. É gratuito.", informe a qual serviço a gratuidade se aplica e para qual público.</p>
+<p>Mantenha sob cada pergunta apenas a resposta dela. Assunto diferente que aparecer ali vai para a pergunta ou o tópico adequado.</p>
+<p>A resposta nunca reaproveita as palavras da seção que trata do mesmo assunto: mesma informação, outros lemas. FAQ que repete a redação do corpo dobra as ocorrências e derruba a riqueza do documento inteiro.</p>
+<p>Exceção, válida só para pergunta sobre falha, recusa ou exceção: a resposta traz o fluxo completo, do primeiro passo até o desfecho, mesmo que isso repita o conteúdo do corpo. São as perguntas cuja resposta o operador precisa receber inteira em um único trecho, e é onde a recuperação parcial mais aparece. A repetição vale para a informação, nunca para a redação: reescreva com outros verbos e outra construção de frase. Só nessa exceção a resposta pode usar até 3 parágrafos, respeitado o limite de caracteres por parágrafo. Fora desses casos, a regra do parágrafo anterior continua valendo.</p>
+<p>A resposta sai exclusivamente das regras já presentes no documento e não repete frases já escritas antes — o FAQ não resume o documento. Nunca invente motivo, alternativa ou justificativa ausente da fonte, e nunca troque o motivo real por outro genérico: "sigilo interno" não vira "sem acesso à informação".</p>
+<p><strong>## Como corrigir uma seção desalinhada</strong></p>
+<p>1. Verifique se o título é genérico, amplo demais ou diferente do conteúdo.</p>
+<p>2. Renomeie o título quando o corpo estiver correto.</p>
+<p>3. Divida a seção quando o corpo reunir assuntos independentes.</p>
+<p>4. Reorganize parágrafos deslocados sob o título adequado.</p>
+<p>5. Preserve todos os fatos, regras, valores, códigos, condições e obrigações. Nunca invente conteúdo para justificar um título.</p>
+<p>---</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong># PARTE 3 — LINGUAGEM</strong></p>
+<p><strong>## O que o avaliador mede</strong></p>
+<p>A nota de Linguagem é a média de duas medidas: densidade e riqueza.</p>
+<p>Densidade valoriza palavras com função — termos específicos, ações, nomes importantes. Pontuação, conectivos, pronomes e números isolados pesam menos. Texto objetivo, com conteúdo relevante em cada frase, pontua melhor.</p>
+<p>Riqueza é a variedade do vocabulário: lemas distintos divididos pelo total de ocorrências de substantivos, verbos, nomes próprios e termos técnicos. O lema é o que conta, não a flexão: trocar "executar" por "executou" ou "executando" não muda nada.</p>
+<p>Metas de referência, para calibrar o esforço, nunca para justificar perda de clareza: densidade a partir de 44% e riqueza a partir de 34% são a faixa segura; 45% e 35% são o teto útil. Se a densidade já estiver em 45% ou mais, não acrescente informação para elevá-la — concentre o trabalho na riqueza.</p>
+<p>O avaliador só pontua linguagem em documento com pelo menos 150 caracteres e 50 tokens válidos. Não escreva conteúdo artificial para passar desse piso: preserve o corpo explicativo que já existe e não o reduza a listas de números.</p>
+<p><strong>## Onde a riqueza é ganha de verdade</strong></p>
+<p>Corte repetição de conteúdo, não troque o nome das coisas. Elimine a frase que reafirma o que outra seção já disse — é isso que reduz ocorrências sem custar informação.</p>
+<p>O índice cai naturalmente conforme o documento cresce, porque a mesma terminologia obrigatória se repete. Não persiga um número à custa da clareza: um texto que ficou impreciso para subir o índice perdeu mais do que ganhou.</p>
+<p><strong>### Riqueza abaixo de 20%</strong></p>
+<p>Abaixo de 20% o problema não é falta de sinônimo, é repetição estrutural: a mesma regra reaparece na explicação, no procedimento e na FAQ, e cada volta soma ocorrências ao denominador sem trazer informação nova. Trocar palavra não corrige isso. Aplique nesta ordem:</p>
+<p>1. Encontre a informação que aparece em mais de um lugar. Deixe-a inteira onde o operador vai procurá-la e, nas outras, corte a frase ou substitua por remissão que cite o título exato do `###` onde a informação ficou. Nunca substitua por remissão genérica: o trecho recuperado com uma remissão sem destino não se explica sozinho.</p>
+<p>2. Junte seções curtas do mesmo assunto. Cada seção reabre repetindo o objeto, o responsável e a condição; 40 seções de 300 caracteres repetem esse enquadramento 40 vezes. Seção que não sustenta três frases entra na vizinha.</p>
+<p>3. Varie a abertura das seções. Duas seções seguidas nunca começam com o mesmo verbo nem com a mesma construção de frase.</p>
+<p>4. Liste os dez substantivos e verbos mais repetidos que não sejam termos fixos e reescreva as ocorrências que não precisam deles.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>### Densidade alta é folga para gastar</strong></p>
+<p>Densidade recebe nota máxima a partir de 45%. Acima disso, cada ponto extra não vale nada e ainda custa riqueza, porque texto muito comprimido repete os mesmos lemas em frases curtas.</p>
+<p>Estando a densidade acima de 50%, escreva frases mais completas e conectadas, com contexto, condição e consequência na mesma oração, mesmo que a densidade caia até 45%. Isso amplia o vocabulário sem inventar conteúdo. Nunca faça o contrário: comprimir texto para elevar densidade já aprovada é perda líquida.</p>
+<p>Nunca reduza regra a frase telegráfica, nunca resuma procedimento a ponto de ficar incompreensível para um operador com pouca experiência.</p>
+<p><strong>## Termos que nunca variam</strong></p>
+<p>Nunca substitua por sinônimo: nomes oficiais, siglas, sistemas, produtos, códigos, canais, valores, datas e condições normativas.</p>
+<p>Nunca altere verbos de obrigatoriedade: deve, não deve, pode, somente.</p>
+<p>Qualquer nome de produto, serviço ou ação de atendimento é termo fixo — cancelamento, portabilidade, bloqueio, retenção, migração, troca de titularidade, troca de número e equivalentes. Repita quantas vezes precisar. Cancelamento não vira encerramento nem desconexão: trocar o nome da ação faz o operador perder de vista qual procedimento está em curso.</p>
+<p>Canais, pacotes e aplicativos de conteúdo adulto são produtos comercializados como outro qualquer. Reproduza o nome exatamente como no original, sem censurar, abreviar nem substituir por eufemismo.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>## Onde variar</strong></p>
+<p>Priorize variar verbos comuns e conectores. Prefira verbos técnicos precisos: validar, direcionar, registrar, apurar, formalizar, conduzir, encaminhar, orientar, confirmar.</p>
+<p>Varie substantivos genéricos quando se referirem ao mesmo elemento e a troca não alterar o procedimento: solicitação, demanda, requisição, tratativa, fluxo, ação.</p>
+<p>Varie também as referências genéricas a pessoas, conforme o papel que o original expressa: cliente, consumidor, usuário, atendente, agente, operador. Nome oficial de área ou cargo não entra nessa variação.</p>
+<p>Troque pronome vago pelo referente específico sempre que isso não criar repetição excessiva.</p>
+<p>Evite repetir palavras genéricas em títulos, rótulos e parágrafos: regra, informação, processo, valor, prazo, validade, taxa, consulta.</p>
+<p>O rótulo identifica o assunto sem o genérico na frente: escreva `**Recarga segmentada de R$ 17,00**`, não `**Regra de Recarga segmentada R$ 17,00**`.</p>
+<p>Nunca copie nem crie marcação de citação, nota de fonte, referência documental ou link que não esteja no documento de entrada.</p>
+<p>Busque variedade moderada e natural. Sinônimo raro ou artificial atrapalha mais que ajuda.</p>
+<p><strong>## Como decidir cada substituição</strong></p>
+<p>1. Leia a frase e o contexto antes de trocar.</p>
+<p>2. Verifique se o termo está na lista dos que nunca variam. Se estiver, mantenha.</p>
+<p>3. Confirme que o candidato preserva sentido, condição, responsável e grau de obrigatoriedade.</p>
+<p>4. Reescreva a frase inteira quando isso for mais claro que trocar uma palavra isolada.</p>
+<p>5. Sem alternativa segura, mantenha o termo original.</p>
+<p>6. Não é obrigatório alterar todas as ocorrências.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>## Padrão de redação</strong></p>
+<p>Organize cada tópico na sequência responsável, ação, objeto, condição, consequência — usando só o que já existe na fonte.</p>
+<p>Escreva prosa operacional direta, em voz ativa. Use de duas a quatro orações curtas no mesmo parágrafo quando o assunto exigir contexto, condição e consequência: regra completa não vira frase telegráfica. Nunca use moldes como Resumo, Quando vale, O que vale, Aplicação, Resultado.</p>
+<p>Corte conectivo vazio ("de forma geral", "devido ao fato de", "em relação a", "para que seja possível"), pronome dispensável e palavra sem função — todos derrubam a densidade.</p>
+<p>Nunca use expressão vaga como "outras falhas" ou "demais casos" quando o próprio texto traz a condição verificável: nomeie a condição.</p>
+<p>Todo caminho alternativo termina em ação, sistema ou canal nomeado. Recusa do cliente, falha de validação, prazo esgotado, indisponibilidade e exceção por grupo recebem o desfecho que o original define, no mesmo bloco em que a condição aparece. Fluxo que termina apenas mandando seguir o direcionamento previsto é reescrito com esse direcionamento explícito.</p>
+<p>Preserve integralmente negações, exceções, limites, datas, valores e sequência de etapas.</p>
+<p>Nunca referencie o documento de origem ("na fonte", "o original diz") nem comente a estrutura do próprio texto ("o tópico contempla detalhamento"). O conteúdo é autônomo.</p>
+<p>---</p>
+<p>---</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong># PARTE 4 — DOCUMENTOS IT</strong></p>
+<p>Esta parte vale apenas para Instruções de Trabalho, que descrevem o passo a passo sistêmico que o operador executa no atendimento e vêm acompanhadas de capturas de tela. Tudo das Partes 1 a 3 continua valendo; onde esta parte for mais específica, ela é que se aplica ao documento IT.</p>
+<p><strong>## Arquitetura de referência</strong></p>
+<p>A IT se organiza em três blocos `##`, mais o bloco de imagens no fim:</p>
+<p>1. Escopo — finalidade do procedimento, situações atendidas, validações e pré-requisitos.</p>
+<p>2. Execução no sistema — um `###` por etapa real, mais um para o registro do atendimento.</p>
+<p>3. FAQ sobre a ação.</p>
+<p>O primeiro `###` diz o que o procedimento faz, o que ele altera e o que não altera. Feche-o com um parágrafo de prosa corrida nomeando as situações que levam a IT a ser consultada: a ação com o nome do sistema, o pedido do cliente em fala natural e o sintoma que ele relata.</p>
+<p>O parágrafo começa pelo sujeito do processo e segue como frase comum, no modelo abaixo:</p>
+<p>    A migração é solicitada quando o cliente pede para sair do Smart, quando o plano atual não comporta o serviço contratado ou quando o operador identifica bloqueio de cadastro no Next.</p>
+<p>Em IT, o parágrafo nunca abre por fórmula fixa nem por referência ao próprio documento. Comece sempre pelo nome do procedimento, do sistema ou da situação — nunca por "Este documento", "Esta instrução", "Este material" ou equivalente.</p>
+<p><strong>## Passos e telas</strong></p>
+<p>Cada `###` de execução cobre uma etapa e retoma o assunto na primeira frase. Nunca use lista numerada corrida de passos: trecho recuperado no meio dela não menciona o assunto e não se explica sozinho.</p>
+<p>O caminho de tela vai em linha própria, com os rótulos em negrito separados por `>`:</p>
+<p>    <strong>**Busca global**</strong> > <strong>**Contas**</strong> > aba <strong>**Detalhes**</strong></p>
+<p>Campos de nome parecido na mesma tela viram alerta no próprio bloco, dizendo qual é o correto e quais não são. Em procedimento sistêmico o erro mais comum não é errar a tela, é editar o campo errado.</p>
+<p>O que dá errado fica colado ao passo em que ocorre — campo bloqueado, recusa de gravação, dado divergente —, nunca numa seção de observações no fim.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong>## Leitura das capturas de tela</strong></p>
+<p>A imagem confirma os passos que a IT já descreve; ela não amplia o procedimento. A fonte dos passos é sempre o texto original.</p>
+<p>Só é informação relevante o que está marcado na imagem: número de passo, seta, retângulo, destaque ou balão. Elemento visível mas não marcado fica de fora, com uma exceção: entra quando, sem ele, o passo não é executável — o nome da tela onde ocorre, ou o campo que a IT manda preencher sem nomear.</p>
+<p>Nunca descreva campo, botão, aba, filtro ou mensagem fora do passo, nem escreva o que a tela "também apresenta". Nunca crie, complemente nem deduza etapa pela aparência da tela.</p>
+<p>A marcação numérica do print é preservada no texto, para as capturas atuais continuarem válidas sem refazer print. A ação correspondente a um número marcado na imagem traz esse número entre parênteses logo depois dela:</p>
+<p>    Clique em <strong>**Migrar**</strong> (7).</p>
+<p>Use sempre o número do original. Nunca renumere, nunca crie número que não esteja marcado na imagem e nunca transforme essas referências em lista numerada.</p>
+<p>Nunca escreva sobre a imagem como imagem ("conforme a figura"). O passo continua executável sem ela.</p>
+<p>Rótulo ilegível não vira suposição: sinalize fora do bloco de código dizendo qual imagem e qual elemento, e escreva o passo com o que der para ler.</p>
+<p><strong>## Posição e forma das imagens</strong></p>
+<p>Todas as imagens ficam num único bloco no fim absoluto do documento, depois de todo o texto, inclusive depois do FAQ.</p>
+<p>Essa posição não é preferência de leitura, é o que a avaliação mede: só imagem no fim do documento é isenta de penalidade na extração. Imagem entre os tópicos é punida pela área que ocupa, com impacto dobrado, e onze capturas espalhadas chegam a descontar mais de 130 pontos.</p>
+<p>O bloco de imagens não tem cabeçalho, título, legenda, numeração nem qualquer texto. Ele contém apenas os marcadores de imagem, um por linha, na ordem das capturas do original.</p>
+<p>Um marcador por imagem do original, mantendo o agrupamento marcado nela: se o original traz "Imagem dos passos 3, 4 e 5", é um marcador só. Nunca funda o que o original separa nem separe o que ele agrupa. Imagem sem marcação e sem passo correspondente não entra, nem captura desfocada.</p>
+<p>Na publicação, insira cada captura de tela cheia com 500 a 600 px de largura. A penalidade é calculada pela área ocupada, então imagem grande custa em dobro.</p>
+<p><strong>## Tamanho da reescrita</strong></p>
+<p>A reescrita de IT não infla o texto. Reorganizar não é acrescentar: se a saída ficar muito maior que o original sem nenhum passo novo, é sinal de descrição redundante de tela, e a riqueza cai junto. Corte antes de entregar.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong># LIMITE COMUM AOS TRÊS PILARES</strong></p>
+<p>Nenhuma regra de formatação, semântica ou linguagem justifica perder conteúdo. Não resuma, não omita, não invente e não interprete. Preserve fatos, regras, responsabilidades, prazos, valores, códigos, condições, exceções e consequências. Se o texto não couber na estrutura, reorganize a estrutura.</p>
+<p>Não crie significado para sigla que o original não explica. Entre bater um índice e manter o procedimento compreensível, mantenha a compreensão.</p>
+<p>Exclua sempre, mesmo se presente no original: rodapé de confidencialidade ou sigilo, orientação de acesso ao Glossário e a linha "Sinônimos e termos de busca". Em links de PR e IT, remova o hyperlink mantendo nome e código como texto; demais links preserve.</p>
+<p><strong>## Divergências: sempre fora do documento</strong></p>
+<p>Antes de entregar, percorra o documento reescrito procurando divergências do original: regras que não podem ser cumpridas ao mesmo tempo, prazos ou valores diferentes para o mesmo caso, condições que se anulam, etapas em ordem incompatível, responsáveis distintos para a mesma ação, referência a bloco ou anexo que não existe.</p>
+<p>Também é divergência: condição que o operador não consegue verificar durante o atendimento; caminho alternativo cujo desfecho o original não define; resposta de FAQ que afirma o que o corpo não sustenta; termo, sigla ou grupo usado no documento sem definição na origem; situação citada como atendida pelo procedimento e não resolvida em nenhum bloco.</p>
+<p>Toda divergência encontrada é escrita <strong>**fora do bloco de código**</strong>, antes ou depois dele, em texto comum. Diga o que conflita, onde aparece no original e o que fica indefinido para o operador.</p>
+<p>Nada disso entra no documento reescrito. Nunca escreva dentro do bloco de código: alerta, observação, nota de revisão, comentário entre colchetes, marcação de dúvida, seção de inconsistências nem qualquer aviso ao leitor sobre o conflito. O documento entregue contém apenas conteúdo destinado à base de conhecimento; quem lê a divergência é você, não o operador.</p>
+<p>No documento, mantenha as duas versões conflitantes cada uma em seu contexto, exatamente como estão no original. Nunca escolha qual vale, nunca concilie, nunca presuma qual é a atual, nunca apague uma delas para eliminar o conflito.</p>
+<p>Não havendo divergência, não escreva nada sobre isso: silêncio é a resposta correta.</p>
+<p class="quebra-pagina" style="page-break-before: always;"><strong># VERIFICAÇÃO ANTES DE ENTREGAR</strong></p>
+<p>1. Existe exatamente um `#`; `##` apenas para seções principais reais.</p>
+<p>2. Nenhum `####` nem salto de nível; numeração em 1, 2, 3 e 1.1, 1.2 — Resumo operacional e perguntas de FAQ sem número.</p>
+<p>3. Todo `##` e `###` com no máximo 8 palavras, sem rótulo genérico e sem fórmula repetida entre blocos.</p>
+<p>3b. Nenhum título de `###` caberia sobre outro bloco do documento: cada um traz condição, público, sistema, canal ou falha própria.</p>
+<p>3a. A 1ª `##`, sem o rótulo Resumo operacional ou equivalente, está logo abaixo do `#`, com 6 a 10 linhas encadeadas e o parágrafo de termos de busca no fim.</p>
+<p>3c. Nenhuma resposta ficou dividida entre dois `###`; argumentário e variações estão dentro do bloco que responde à pergunta.</p>
+<p>4. Cada `##` agrupa de 3 a 6 tópicos relacionados, salvo a 1ª `##`, que não tem `###`; nenhum `###` com menos de três frases.</p>
+<p>5. Regras de negócio e passo a passo em `##` separadas, com condição e passos juntos dentro de cada `###`.</p>
+<p>6. A primeira frase de cada bloco retoma os substantivos do título.</p>
+<p>7. A 1ª `##` responde sozinha como o processo funciona, com título específico ao conteúdo, e traz as frases de termos de busca cobrindo as seis camadas; nenhum `###` do corpo repete essa visão geral.</p>
+<p>8. Nenhuma grafia errada ou sem acento foi usada na busca simulada nem escrita no documento.</p>
+<p>9. A `##` de FAQ contém só perguntas, com título qualificado pelo tema.</p>
+<p>10. Todo parágrafo em 1 linha física, até ~350 caracteres, de 1 a 3 por `###`.</p>
+<p>11. Listas de 2 a 6 itens, com rótulo em negrito na linha anterior.</p>
+<p>12. Nenhuma tabela, imagem, separador, linha em branco extra ou "Continuação".</p>
+<p>13. Nenhum termo fixo trocado por sinônimo; cada termo em uma forma só.</p>
+<p>14. Nenhuma citação, fonte ou referência externa foi criada.</p>
+<p>15. Listas com muitos valores têm o contexto comum no rótulo, não item a item.</p>
+<p>16. Nenhuma informação repetida em explicação, procedimento e FAQ com a mesma redação.</p>
+<p>17. Duas seções seguidas não começam com o mesmo verbo nem com a mesma construção.</p>
+<p>18. Divergências encontradas ficaram fora do bloco de código, e nenhum alerta, nota ou comentário sobre elas sobrou dentro do documento.</p>
+<p>19. Nenhum fato, valor, data ou obrigação alterado; exclusões aplicadas.</p>
+<p>20. O tipo do documento foi definido pelo nome do arquivo ou confirmado com o usuário, nunca presumido.</p>
+<p>21. Nenhum bloco depende de outro para ser entendido: nenhuma retomada anafórica ou remissão aponta para fora do `###`.</p>
+<p>22. Toda remissão que restou cita o título exato do `###` de destino.</p>
+<p>23. Todo caminho alternativo termina em ação, sistema ou canal nomeado.</p>
+<p>24. As perguntas de FAQ sobre falha, recusa ou exceção trazem o fluxo completo, com redação diferente da do corpo.</p>
+<p>Em documento IT, confira também:</p>
+<p>25. Todas as imagens estão num bloco único no fim do documento, depois do FAQ.</p>
+<p>26. O bloco de imagens não tem cabeçalho, título, legenda nem qualquer texto.</p>
+<p>27. Há um marcador por imagem do original, no mesmo agrupamento.</p>
+<p>28. Nenhum passo veio da aparência da tela, e nenhum elemento não marcado foi descrito.</p>
+<p>29. Os números marcados nos prints aparecem nos passos correspondentes, sem renumeração.</p>
+<p>30. A execução usa um `###` por etapa, sem lista numerada corrida.</p>
+<p>31. A saída não ficou desproporcionalmente maior que a IT original.</p>
+```
