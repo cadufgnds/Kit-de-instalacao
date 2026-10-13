@@ -35,7 +35,7 @@ from formata.motor import VERSAO_DIRETRIZES
 from .config import EXTENSOES_ACEITAS, Configuracao
 from .execucao import FalhaExecucao, TempoEsgotado, executar
 
-VERSAO_APP = "0.2.0"
+VERSAO_APP = "0.3.0"
 log = logging.getLogger("formata.api")
 
 STATUS_POR_CODIGO = {

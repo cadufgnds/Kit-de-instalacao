@@ -95,6 +95,7 @@ def test_estado_inicial_deixa_claro_que_nada_foi_processado(pagina):
     assert pagina.inner_text("#status-titulo") == "Documento ainda não processado"
     assert pagina.is_hidden("#painel-resultado")
     assert pagina.is_hidden("#botao-tentar")
+    assert pagina.is_hidden("#aviso-sem-script") and pagina.is_enabled("#botao-formatar")
     assert pagina.inner_text("#versao-diretrizes") == "2.6"
     # Ícone da página: favicon declarado e imagem do cabeçalho carregada.
     assert pagina.get_attribute('link[rel="icon"][type="image/png"]', "href") == "marca/icone/icone-32.png"
@@ -266,3 +267,83 @@ def test_acessibilidade_axe_sem_violacoes(navegador, url_base, largura):
     pg.click("#botao-formatar")
     assert violacoes() == []
     contexto.close()
+
+
+# --- Publicação em subpasta -----------------------------------------------------------------
+
+
+def _porta_livre():
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def test_publicacao_em_subpasta_usa_enderecos_relativos(navegador):
+    from starlette.applications import Starlette
+    from starlette.routing import Mount
+
+    porta = _porta_livre()
+    app = Starlette(routes=[Mount("/formata", app=criar_app(Configuracao(isolamento="direto")))])
+    servidor = uvicorn.Server(uvicorn.Config(app, host="127.0.0.1", port=porta, log_level="warning"))
+    thread = threading.Thread(target=servidor.run, daemon=True)
+    thread.start()
+    for _ in range(100):
+        if servidor.started:
+            break
+        time.sleep(0.05)
+    try:
+        pg = navegador.new_page()
+        pg.goto(f"http://127.0.0.1:{porta}/formata/")
+        _formatar(pg, "# T\ntexto")
+        assert "status--sucesso" in pg.get_attribute("#status", "class")
+        assert pg.locator("#saida-html").text_content() == formatar("# T\ntexto").html
+        pg.close()
+    finally:
+        servidor.should_exit = True
+        thread.join(timeout=5)
+
+
+# --- Página servida sem a API (o erro "O servidor não conseguiu processar o documento") ------
+
+
+def test_pagina_sem_api_explica_o_problema_ao_abrir_e_ao_formatar(navegador, tmp_path):
+    """Hospedagem só de arquivos (sem PHP/Python): o POST volta 405 em HTML, sem o JSON da API."""
+    import functools
+    import http.server
+
+    class SoArquivos(http.server.SimpleHTTPRequestHandler):
+        def do_POST(self):  # noqa: N802
+            corpo = b"<html><body>405 Not Allowed</body></html>"
+            self.send_response(405)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Length", str(len(corpo)))
+            self.end_headers()
+            self.wfile.write(corpo)
+
+        def log_message(self, *args):
+            pass
+
+    pasta = str(Path(__file__).resolve().parents[2] / "frontend")
+    servidor = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(SoArquivos, directory=pasta))
+    threading.Thread(target=servidor.serve_forever, daemon=True).start()
+    try:
+        pg = navegador.new_page()
+        pg.goto(f"http://127.0.0.1:{servidor.server_address[1]}/")
+        playwright_api.expect(pg.locator("#status-titulo")).to_have_text("A API do Formata.AI não respondeu")
+        assert "HTTP 404" in pg.inner_text("#status-erros")
+        pg.fill("#texto", "# T\ntexto")
+        pg.click("#botao-formatar")
+        playwright_api.expect(pg.locator("#status-erros")).to_contain_text("HTTP 405")
+        assert "pastas api e nucleo" in pg.inner_text("#status-texto")
+        assert pg.is_hidden("#painel-resultado")
+        pg.close()
+    finally:
+        servidor.shutdown()
+
+
+def test_pagina_aberta_do_disco_fica_inoperante_e_avisa(navegador):
+    pg = navegador.new_page()
+    pg.goto((Path(__file__).resolve().parents[2] / "frontend" / "index.html").as_uri())
+    assert pg.is_visible("#aviso-sem-script")
+    assert pg.is_disabled("#botao-formatar")  # sem script, o formulário não manda o documento pela URL
+    pg.close()

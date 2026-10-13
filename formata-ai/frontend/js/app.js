@@ -3,7 +3,29 @@
 // O conteúdo do documento nunca é inserido como HTML na página: tudo entra
 // por textContent, e a pré-visualização roda num iframe isolado (sandbox).
 
-const API = (document.querySelector('meta[name="formata-api"]')?.content || "").replace(/\/$/, "");
+// Endereço da API: o do <meta name="formata-api"> ou, se vazio, a pasta desta página.
+// Endereços relativos funcionam também quando o sistema é publicado numa subpasta (ex.: /formata/).
+const BASE_API = (() => {
+  const meta = document.querySelector('meta[name="formata-api"]')?.content?.trim();
+  const base = new URL(meta || ".", document.baseURI);
+  if (!base.pathname.endsWith("/")) base.pathname += "/";
+  return base;
+})();
+// No hub (PHP), as rotas terminam em .php: <meta name="formata-api-extensao" content=".php">.
+const EXTENSAO_API = document.querySelector('meta[name="formata-api-extensao"]')?.content?.trim() || "";
+const urlApi = (rota) => new URL(`api/${rota}${EXTENSAO_API}`, BASE_API).toString();
+
+const TITULO_SEM_API = "A API do Formata.AI não respondeu";
+const MENSAGEM_SEM_API =
+  "A página foi aberta, mas a parte que formata os documentos não está disponível. " +
+  "Confira se a pasta da ferramenta foi copiada inteira para o servidor (incluindo as pastas api e nucleo) " +
+  "e se o servidor executa PHP 7.4 ou superior.";
+const TITULO_SESSAO = "Sessão do hub encerrada";
+const MENSAGEM_SESSAO = "O hub pediu login de novo. Entre novamente no hub, volte a esta ferramenta e tente outra vez.";
+
+// O hub redireciona para a tela de login quando a sessão expira: a resposta vem em HTML.
+const ehRedirecionamentoDeLogin = (resposta) =>
+  resposta.redirected || (resposta.headers.get("content-type") || "").includes("text/html");
 const EXTENSOES_PADRAO = [".md", ".markdown", ".txt", ".html", ".htm"];
 
 const $ = (id) => document.getElementById(id);
@@ -45,19 +67,29 @@ const estado = {
 
 // ---------- Configuração do servidor ----------
 
+async function lerJson(url) {
+  const resposta = await fetch(url, { headers: { Accept: "application/json" } });
+  let corpo = null;
+  try { corpo = await resposta.json(); } catch { /* não é JSON */ }
+  return { resposta, corpo };
+}
+
 async function carregarConfiguracao() {
+  // Confere logo ao abrir se a API responde, para o problema aparecer antes do envio.
   try {
-    const [cfg, saude] = await Promise.all([
-      fetch(`${API}/api/configuracao`).then((r) => (r.ok ? r.json() : null)),
-      fetch(`${API}/api/saude`).then((r) => (r.ok ? r.json() : null)),
-    ]);
-    if (cfg) estado.config = cfg;
-    if (saude) {
+    const { resposta, corpo: saude } = await lerJson(urlApi("saude"));
+    if (ehRedirecionamentoDeLogin(resposta) && resposta.ok) {
+      mostrarErro(TITULO_SESSAO, MENSAGEM_SESSAO);
+    } else if (resposta.ok && saude?.status === "ok") {
       $("versao-diretrizes").textContent = saude.versao_diretrizes;
       $("versao-app").textContent = `v${saude.versao}`;
+      const { corpo: cfg } = await lerJson(urlApi("configuracao"));
+      if (cfg?.limite_bytes) estado.config = cfg;
+    } else {
+      mostrarErro(TITULO_SEM_API, MENSAGEM_SEM_API, [`Endereço consultado: ${urlApi("saude")}`, `Resposta: HTTP ${resposta.status}`]);
     }
   } catch {
-    // Sem configuração, valem os padrões; o servidor valida de novo de qualquer forma.
+    mostrarErro(TITULO_SEM_API, MENSAGEM_SEM_API, [`Endereço consultado: ${urlApi("saude")}`, "Resposta: nenhuma (servidor fora do ar ou bloqueado)"]);
   }
   document.querySelectorAll("[data-limite-kb]").forEach((n) => {
     n.textContent = formatarNumero(Math.floor(estado.config.limite_bytes / 1024));
@@ -236,9 +268,9 @@ async function formatar() {
       const dados = new FormData();
       dados.append("arquivo", estado.arquivo);
       dados.append("modo", modo);
-      resposta = await fetch(`${API}/api/formatar/arquivo`, { method: "POST", body: dados, signal: controle.signal });
+      resposta = await fetch(urlApi("formatar/arquivo"), { method: "POST", body: dados, signal: controle.signal });
     } else {
-      resposta = await fetch(`${API}/api/formatar`, {
+      resposta = await fetch(urlApi("formatar"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ texto: el.texto.value, modo }),
@@ -257,6 +289,18 @@ async function formatar() {
       return;
     }
     descartarResultado();
+    if (typeof corpo?.codigo !== "string" && resposta.ok && ehRedirecionamentoDeLogin(resposta)) {
+      mostrarErro(TITULO_SESSAO, MENSAGEM_SESSAO, [], true);
+      anunciar(`${TITULO_SESSAO}. ${MENSAGEM_SESSAO}`);
+      return;
+    }
+    // Resposta que não vem da API do Formata.AI (sem "codigo"): API ausente ou servidor sem PHP.
+    if (typeof corpo?.codigo !== "string" && !(resposta.status in MENSAGENS_HTTP)) {
+      const rota = estado.arquivo ? "formatar/arquivo" : "formatar";
+      mostrarErro(TITULO_SEM_API, MENSAGEM_SEM_API, [`Endereço consultado: ${urlApi(rota)}`, `Resposta: HTTP ${resposta.status}`], true);
+      anunciar(`${TITULO_SEM_API}. ${MENSAGEM_SEM_API}`);
+      return;
+    }
     const mensagem = corpo?.mensagem || MENSAGENS_HTTP[resposta.status] || "O servidor não conseguiu processar o documento.";
     const titulo = corpo?.codigo === "falha_validacao" ? "Resultado não entregue: falhou nas verificações"
       : corpo?.codigo === "tempo_esgotado" ? "Tempo de processamento esgotado"
@@ -268,7 +312,8 @@ async function formatar() {
     const tempo = erro?.name === "AbortError";
     mostrarErro(tempo ? "Sem resposta do servidor" : "Não foi possível falar com o servidor",
       tempo ? "O servidor demorou demais para responder. Tente novamente."
-        : "Verifique a conexão e tente novamente.", [], true);
+        : "Verifique a conexão com a rede e tente novamente.",
+      [`Endereço consultado: ${urlApi(estado.arquivo ? "formatar/arquivo" : "formatar")}`], true);
     anunciar("Falha de comunicação com o servidor.");
   } finally {
     window.clearTimeout(prazo);
@@ -473,4 +518,8 @@ el.zona.addEventListener("drop", (e) => {
   if (!el.zona.contains(e.target)) e.preventDefault();
 }));
 
+// A página só fica operante com o script carregado (sem ele, o envio nativo do formulário
+// colocaria o documento na URL).
+$("aviso-sem-script").hidden = true;
+el.botaoFormatar.disabled = false;
 carregarConfiguracao();

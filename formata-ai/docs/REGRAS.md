@@ -17,6 +17,8 @@ O motor é determinístico, sem IA generativa: o mesmo texto de entrada produz s
 
 Todos os números e textos fixos (34, 40, 85, 8, a tag de quebra e a linha de imagens) ficam em `formata/regras.py`.
 
+A versão para o hub (`php/nucleo/formata.php`) traduz essas mesmas funções para PHP. A classe de espaços em branco é explícita, igual à do Python, e as posições internas são contadas em bytes, com a mesma ordem de inserção das tags. `tests/test_php.py` exige resultado idêntico ao do motor de referência para casos de borda, cenários de paginação, o documento real, 800 documentos aleatórios com as respectivas reformatações e 1.000 textos Unicode aleatórios.
+
 ## Regras aplicadas
 
 **Integridade (seção 2, prioridade 1).** O motor só acrescenta `<p>`, `<strong>`, os atributos de quebra e a linha de imagens. Saem do documento apenas as linhas em branco, o rodapé de confiabilidade e, em documento que já chega com `<p>`, os parágrafos sem texto, as quebras antigas e a linha de imagens de uma formatação anterior. Cada remoção é registrada com o número da linha e o motivo, e a verificação confere uma por uma.

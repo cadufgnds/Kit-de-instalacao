@@ -24,7 +24,7 @@ def api():
 
 
 def test_saude_e_configuracao(api):
-    assert api.get("/api/saude").json() == {"status": "ok", "versao": "0.2.0", "versao_diretrizes": "2.6"}
+    assert api.get("/api/saude").json() == {"status": "ok", "versao": "0.3.0", "versao_diretrizes": "2.6"}
     cfg = api.get("/api/configuracao").json()
     assert cfg["limite_bytes"] == 1_048_576 and ".md" in cfg["extensoes_aceitas"]
 

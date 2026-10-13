@@ -1,0 +1,79 @@
+FORMATA.AI — FERRAMENTA PARA O HUB (VERSÃO PHP)
+================================================
+
+O que é
+-------
+Formata e pagina documentos operacionais para a base I.Ajuda, seguindo as
+Diretrizes Formata.AI v2.6, sem alterar nenhum caractere do texto.
+Não usa banco de dados e não guarda os documentos: cada um é processado e
+descartado na hora.
+
+
+Requisitos do servidor
+----------------------
+- PHP 7.4 ou superior (o mesmo que já roda o hub).
+- Extensão mbstring do PHP (vem ativa na maioria das hospedagens).
+
+
+Como instalar
+-------------
+1. Extraia o arquivo formata-ai-php.zip. Ele contém uma pasta chamada formata-ai.
+
+2. Copie a pasta formata-ai inteira para dentro da pasta do hub no servidor,
+   ao lado das pastas admin, assets, includes...
+
+       hub/
+         admin/
+         assets/
+         includes/
+         formata-ai/      <- a pasta nova
+         index.php
+         ...
+
+3. Teste no navegador:
+       https://ENDERECO-DO-HUB/formata-ai/api/saude.php
+   Deve aparecer uma linha parecida com:
+       {"status":"ok","versao":"0.3.0","versao_diretrizes":"2.6"}
+
+4. Abra a ferramenta:
+       https://ENDERECO-DO-HUB/formata-ai/
+   Cole um texto, clique em "Formatar documento" e confira o resultado.
+
+
+Exigir o login do hub (recomendado)
+-----------------------------------
+Abra formata-ai/config.php e preencha 'arquivo_autenticacao' com o mesmo
+arquivo que as outras páginas do hub usam para verificar o login. Exemplo:
+
+    'arquivo_autenticacao' => '../includes/verifica-login.php',
+
+Com isso, quem não estiver logado no hub não consegue usar a ferramenta.
+Mudanças em config.php podem levar alguns segundos para valer (cache do PHP).
+
+
+Problemas comuns
+----------------
+"A API do Formata.AI não respondeu"
+    A pasta foi copiada incompleta (faltam api ou nucleo) ou o servidor não
+    está executando PHP nessa pasta. Refaça o passo 2 e teste o passo 3.
+
+"Sessão do hub encerrada"
+    O login do hub expirou. Entre de novo no hub e volte à ferramenta.
+
+O teste do passo 3 mostra "requisito_ausente"
+    O servidor precisa de PHP 7.4+ com mbstring. Peça ao responsável pela
+    hospedagem para ativar.
+
+Arquivo .docx recusado
+    Ainda não é aceito. Copie o texto e cole na página, ou salve o documento
+    como .txt ou .md em UTF-8.
+
+
+Configurações (config.php)
+--------------------------
+limite_bytes          tamanho máximo do documento (padrão: 1 MB)
+limite_linhas         linhas por documento (padrão: 20.000)
+tempo_limite          segundos por formatação (padrão: 15)
+arquivo_autenticacao  login do hub (veja acima)
+registrar_log         registra no log do PHP só tamanho, resultado e duração;
+                      nunca o conteúdo dos documentos

@@ -121,6 +121,10 @@ a { color: var(--marca-roxo); }
 @media (min-width: 960px) { #enviar { margin-top: -72px; } }
 
 .passos { display: grid; gap: 24px; }
+.aviso-sem-script {
+  margin: 0 0 24px; padding: 16px 20px; border-radius: var(--marca-raio-pequeno); position: relative;
+  border: 1.5px solid var(--marca-erro); background: var(--marca-erro-fundo); color: var(--marca-erro);
+}
 @media (min-width: 1040px) { .passos { grid-template-columns: 1.15fr 1fr; align-items: start; } }
 
 .cartao { background: #fff; border-radius: var(--marca-raio); box-shadow: var(--marca-sombra); border: 1px solid var(--marca-borda); padding: 24px; }

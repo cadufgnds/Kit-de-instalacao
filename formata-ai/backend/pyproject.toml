@@ -1,6 +1,6 @@
 [project]
 name = "formata-ai"
-version = "0.2.0"
+version = "0.3.0"
 description = "Formata.AI Web — paginação e marcação HTML determinísticas (Diretrizes v2.6)"
 requires-python = ">=3.10"
 # O motor (pacote formata) só usa a biblioteca padrão; as dependências abaixo são do servidor.

@@ -1,5 +1,7 @@
 # API do Formata.AI Web
 
+As duas versões, PHP (hub) e Python, têm o mesmo contrato. No hub, as rotas terminam em `.php`: `api/saude.php`, `api/configuracao.php`, `api/formatar.php` e `api/formatar/arquivo.php`, a partir da pasta da ferramenta (por exemplo, `https://hub/formata-ai/api/formatar.php`). No hub também existem os códigos `metodo_nao_permitido` (405) e, em `saude.php`, `requisito_ausente` (500, quando falta PHP 7.4 ou mbstring).
+
 Base: o mesmo endereço que entrega a landing page. A documentação interativa (OpenAPI) fica em `/api/docs`, e o esquema em `/api/openapi.json`; as duas podem ser desativadas com `FORMATA_DOCS_API=0`.
 
 Todas as respostas são JSON em UTF-8, com `Cache-Control: no-store`. Nenhum documento é gravado em disco ou em log.
@@ -90,7 +92,7 @@ Os erros mantêm o mesmo formato: `ok: false`, `codigo`, `mensagem` e `erros`.
 
 ## Outras rotas
 
-- `GET /api/saude` → `{"status": "ok", "versao": "0.2.0", "versao_diretrizes": "2.6"}`
+- `GET /api/saude` → `{"status": "ok", "versao": "0.3.0", "versao_diretrizes": "2.6"}`
 - `GET /api/configuracao` → limites e formatos aceitos, que a interface usa para validar antes de enviar
 
 ## Exemplos

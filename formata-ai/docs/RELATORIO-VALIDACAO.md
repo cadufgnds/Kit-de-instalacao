@@ -4,7 +4,7 @@ Gerado em 13/10/2026 por `scripts/gerar_relatorio.py`, contra as Diretrizes Form
 
 ## Suíte automatizada
 
-Resultado: **870 passed, 1 warning in 38.24s**
+Resultado: **914 passed, 1 warning in 62.60s (0:01:02)**
 
 Os testes de navegador usam Chromium (Playwright). A auditoria de acessibilidade com axe-core (WCAG 2.0/2.1/2.2 A e AA + boas práticas) roda quando `FORMATA_AXE_JS` aponta para o `axe.min.js`; ela foi incluída nesta execução.
 
@@ -16,7 +16,10 @@ Os testes de navegador usam Chromium (Playwright). A auditoria de acessibilidade
 | `test_aceitacao.py` | Cenários de aceitação da especificação e testes de mutação da verificação | 23 | 0 | 0 |
 | `test_regressao.py` | Saída de referência do documento real, determinismo, idempotência, 400 documentos aleatórios | 402 | 0 | 0 |
 | `test_api.py` | API: contratos, limites, tipos de arquivo, erros, tempo-limite, cabeçalhos, logs sem conteúdo | 37 | 0 | 0 |
-| `test_interface.py` | Navegador real: fluxo completo, upload, erros, cópia, teclado, conteúdo malicioso, telas, acessibilidade (axe) | 17 | 0 | 0 |
+| `test_interface.py` | Navegador real: fluxo completo, upload, erros, cópia, teclado, conteúdo malicioso, página sem API, telas, acessibilidade (axe) | 20 | 0 | 0 |
+| `test_php.py` | Motor PHP idêntico ao de referência: casos de borda, paginação, documento real, 800 documentos e 1.000 textos Unicode aleatórios | 12 | 0 | 0 |
+| `test_php_api.py` | Versão PHP para o hub: API, arquivos, limites, login do hub, página e fluxo no navegador | 27 | 0 | 0 |
+| `test_pacote.py` | Pacote entrega/formata-ai-php.zip completo e em dia com os fontes | 2 | 0 | 0 |
 
 ## Cenários de aceitação
 

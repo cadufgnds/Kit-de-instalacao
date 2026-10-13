@@ -1,6 +1,30 @@
 # Implantação do Formata.AI Web
 
-A aplicação é um único serviço HTTP. Ele entrega a landing page (pasta `frontend/`) e a API (`/api/...`). O motor de paginação não depende de banco de dados, de armazenamento nem de serviço externo.
+Há duas formas de implantar, com o mesmo resultado:
+
+- **No hub em PHP (recomendada).** É a mesma infraestrutura das outras ferramentas.
+- **Como serviço Python.** Útil em servidores que rodam contêineres.
+
+Nenhuma das duas usa banco de dados, armazenamento ou serviço externo.
+
+## No hub (PHP)
+
+1. Gere ou baixe o pacote `entrega/formata-ai-php.zip` (`python backend/scripts/empacotar_php.py`).
+2. Copie a pasta `formata-ai` do pacote para dentro da pasta do hub.
+3. Confira `https://ENDERECO-DO-HUB/formata-ai/api/saude.php`, que deve responder `{"status":"ok", ...}`.
+4. Em `formata-ai/config.php`, aponte `arquivo_autenticacao` para o arquivo que o hub usa para exigir login. A partir daí, a página e a API só respondem a quem estiver logado. Com a sessão expirada, a interface mostra "Sessão do hub encerrada".
+
+O que a versão PHP precisa e garante:
+- **Requisitos:** PHP 7.4 ou superior com mbstring. Funciona com o limite de memória comum de hospedagem (128 MB). Testada em Apache com PHP 7.4 e 8.2 e no servidor embutido do PHP 8.3.
+- **Proteção das pastas:** o `.htaccess` do pacote bloqueia o acesso a `config.php`, `nucleo/` e `ferramentas/`. Se o servidor não for Apache (ou ignorar `.htaccess`), bloqueie essas pastas na configuração do servidor web.
+- **Tempo-limite:** é o `tempo_limite` de `config.php`. Ao estourar, a resposta é 504 com `tempo_esgotado`.
+- **Privacidade:** o arquivo enviado é lido e apagado na hora. O log de erros do PHP recebe só identificador, tamanho, código do resultado e duração.
+
+O restante deste guia trata da versão em Python.
+
+## Como serviço Python
+
+O serviço entrega a landing page (pasta `frontend/`) e a API (`/api/...`).
 
 ## Requisitos
 

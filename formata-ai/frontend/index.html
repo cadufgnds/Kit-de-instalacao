@@ -7,6 +7,8 @@
   <meta name="description" content="Paginação e marcação HTML automáticas de documentos operacionais, conforme as Diretrizes Formata.AI v2.6.">
   <!-- Endereço da API. Vazio = mesmo servidor que entrega esta página. -->
   <meta name="formata-api" content="">
+  <!-- Extensão das rotas da API: vazia no servidor Python, ".php" no hub. -->
+  <meta name="formata-api-extensao" content="">
   <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
   <link rel="icon" href="marca/icone/icone-32.png" type="image/png" sizes="32x32">
   <link rel="icon" href="marca/icone/icone-96.png" type="image/png" sizes="96x96">
@@ -57,7 +59,11 @@
 
     <section class="secao" id="enviar" aria-label="Envio e configuração">
       <div class="container">
-        <form id="formulario" class="passos" novalidate>
+        <p class="aviso-sem-script" id="aviso-sem-script" role="alert">
+          <strong>A página não está operante.</strong> Ela precisa ser aberta pelo endereço do servidor
+          (por exemplo, pelo hub), com JavaScript ativado. Abrir o arquivo direto do computador não funciona.
+        </p>
+        <form id="formulario" class="passos" method="post" novalidate>
           <div class="cartao passo">
             <div class="passo__cabecalho">
               <span class="passo__numero" aria-hidden="true">1</span>
@@ -146,7 +152,7 @@
             </fieldset>
 
             <div class="acoes">
-              <button type="submit" class="botao botao--primario" id="botao-formatar">Formatar documento</button>
+              <button type="submit" class="botao botao--primario" id="botao-formatar" disabled>Formatar documento</button>
               <button type="button" class="botao botao--secundario" id="botao-limpar">Limpar entrada</button>
             </div>
           </div>

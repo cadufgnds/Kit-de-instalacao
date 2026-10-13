@@ -112,7 +112,10 @@ def main() -> None:
         "test_aceitacao": "Cenários de aceitação da especificação e testes de mutação da verificação",
         "test_regressao": "Saída de referência do documento real, determinismo, idempotência, 400 documentos aleatórios",
         "test_api": "API: contratos, limites, tipos de arquivo, erros, tempo-limite, cabeçalhos, logs sem conteúdo",
-        "test_interface": "Navegador real: fluxo completo, upload, erros, cópia, teclado, conteúdo malicioso, telas, acessibilidade (axe)",
+        "test_interface": "Navegador real: fluxo completo, upload, erros, cópia, teclado, conteúdo malicioso, página sem API, telas, acessibilidade (axe)",
+        "test_php": "Motor PHP idêntico ao de referência: casos de borda, paginação, documento real, 800 documentos e 1.000 textos Unicode aleatórios",
+        "test_php_api": "Versão PHP para o hub: API, arquivos, limites, login do hub, página e fluxo no navegador",
+        "test_pacote": "Pacote entrega/formata-ai-php.zip completo e em dia com os fontes",
     }
     for arquivo, descricao in cobertura.items():
         out.append(
