@@ -37,6 +37,25 @@ def tokenizar_strong(bruto: str) -> list[Token] | None:
     return tokens if profundidade == 0 else None
 
 
+def achatar_strong(tokens: list[Token]) -> tuple[list[Token], bool]:
+    """Remove <strong> internos a outro <strong> (proibidos pela seção 3); o texto não muda."""
+    saida: list[Token] = []
+    profundidade = 0
+    achatou = False
+    for token in tokens:
+        if token.tipo == "abre":
+            profundidade += 1
+            if profundidade > 1:
+                achatou = True
+                continue
+        elif token.tipo == "fecha":
+            profundidade -= 1
+            if profundidade >= 1:
+                continue
+        saida.append(token)
+    return saida, achatou
+
+
 def mascarar_codigo_inline(texto: str) -> str:
     """Troca o conteúdo de `código` por um caractere neutro, mantendo as posições."""
     return R.RE_CODIGO_INLINE.sub(lambda m: "\x00" * len(m.group(0)), texto)
@@ -63,6 +82,9 @@ def marcar_conteudo(linha: Linha, avisos: list[str]) -> str:
     if tokens is None:
         avisos.append(f"Linha {linha.numero}: tags <strong> desbalanceadas foram descartadas e o negrito foi reaplicado.")
         tokens = [Token("texto", texto)]
+    tokens, achatou = achatar_strong(tokens)
+    if achatou:
+        avisos.append(f"Linha {linha.numero}: <strong> aninhado na entrada; mantido só o mais externo.")
 
     # Profundidade de <strong> já existente em cada caractere do texto.
     profundidade_por_char: list[int] = []
@@ -82,9 +104,9 @@ def marcar_conteudo(linha: Linha, avisos: list[str]) -> str:
         if all(dentro):
             continue  # já está em negrito: não duplicar a tag
         if any(dentro):
-            avisos.append(
-                f"Linha {linha.numero}: negrito sobreposto a <strong> existente; mantido como recebido."
-            )
+            aviso = f"Linha {linha.numero}: negrito sobreposto a <strong> existente; mantido como recebido."
+            if not avisos or avisos[-1] != aviso:
+                avisos.append(aviso)
             continue
         aberturas.add(inicio)
         fechamentos.add(fim - 1)

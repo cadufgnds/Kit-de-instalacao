@@ -1,75 +1,91 @@
-# Formata.AI Web — prova de conceito do motor de paginação
+# Formata.AI Web
 
-Motor determinístico que aplica as **Diretrizes Formata.AI v2.6** a documentos operacionais para a base I.Ajuda. Ele faz cinco coisas:
+Ferramenta web que formata e pagina documentos operacionais para a base de conhecimento I.Ajuda, aplicando as **Diretrizes Formata.AI v2.6** de forma determinística, sem IA generativa. O processamento faz cinco coisas:
 
 - descarta as linhas em branco e o rodapé de confiabilidade;
 - mede e agrupa os blocos;
 - decide FICA, QUEBRA ou SEGUE para cada bloco;
 - escreve a lista de paginação;
-- gera o HTML com `<p>`, `<strong>`, as quebras e a linha de imagens, sem alterar nenhum caractere do texto.
+- gera o HTML com `<p>`, `<strong>`, as quebras de página e a linha de imagens.
 
-Esta é a etapa 1 do projeto, pedida antes da interface: o algoritmo e os testes automatizados. A API, a landing page e a implantação vêm depois que as regras e as decisões de interpretação forem validadas.
+Nada disso altera um caractere do texto original.
+
+![Landing page](docs/demo/01-inicio.jpg)
 
 ## Estrutura
 
 ```
 formata-ai/
+├── frontend/                 landing page (HTML, CSS e JS puros, sem etapa de build)
+│   ├── index.html
+│   ├── css/app.css
+│   ├── js/app.js
+│   └── marca/marca.css       ← configuração de cores e fontes da marca
 ├── backend/
-│   ├── formata/            motor (Python 3.10+, só biblioteca padrão)
-│   │   ├── regras.py       constantes normativas: 34, 40, 85, 8, tag de quebra, padrões
-│   │   ├── entrada.py      leitura, linhas em branco, rodapé, imagens, documento com <p>
-│   │   ├── blocos.py       delimitação (5.1) e medida (5.2)
-│   │   ├── paginacao.py    decisão (5.3) e lista (5.4)
-│   │   ├── marcacao.py     <p>, <strong>, quebra (5.5) e imagens (5.6)
-│   │   ├── validacao.py    verificações independentes da saída
-│   │   ├── motor.py        orquestração e formato da resposta (seção 8)
-│   │   └── __main__.py     linha de comando
-│   ├── tests/              suíte pytest, saída de referência e documento real
+│   ├── formata/              motor de regras (só biblioteca padrão do Python)
+│   │   ├── regras.py         constantes normativas: 34, 40, 85, 8, tag de quebra, padrões
+│   │   ├── entrada.py        leitura, linhas em branco, rodapé, imagens, documento com <p>
+│   │   ├── blocos.py         delimitação (5.1) e medida (5.2)
+│   │   ├── paginacao.py      decisão (5.3) e lista (5.4)
+│   │   ├── marcacao.py       <p>, <strong>, quebra (5.5) e imagens (5.6)
+│   │   ├── validacao.py      verificações independentes da saída
+│   │   ├── motor.py          orquestração e formato da resposta (seção 8)
+│   │   └── trabalhador.py    processo isolado usado pelo servidor
+│   ├── servidor/             API FastAPI, limites, segurança, entrega da landing page
+│   ├── tests/                suíte pytest: motor, API e navegador (Playwright)
 │   └── scripts/gerar_relatorio.py
-└── docs/
-    ├── REGRAS.md                 regras implementadas e decisões de interpretação
-    └── RELATORIO-VALIDACAO.md    resultado da suíte e dos cenários de aceitação
+├── docs/
+│   ├── REGRAS.md             regras implementadas e decisões de interpretação validadas
+│   ├── API.md                contrato da API
+│   ├── IMPLANTACAO.md        execução, Docker, produção, privacidade
+│   ├── DEMONSTRACAO.md       fluxo completo em capturas de tela
+│   └── RELATORIO-VALIDACAO.md
+├── Dockerfile
+└── .env.example
 ```
 
 ## Como executar
 
 ```bash
 cd formata-ai/backend
-python -m pip install pytest          # única dependência, e só para os testes
+python -m pip install -r requirements.txt
+python -m servidor                    # abre em http://127.0.0.1:8000
+```
 
-python -m formata documento.md        # imprime a lista e o HTML (formato da seção 8)
-python -m formata documento.md --json # resultado completo: itens, remoções, avisos
-python -m formata - < documento.md    # lê da entrada padrão
-python -m formata saida.html --modo html   # força o modo de documento com <p>
+Com Docker:
 
-python -m pytest                      # roda a suíte
+```bash
+cd formata-ai
+docker build -t formata-ai .
+docker run -p 8000:8000 formata-ai
+```
+
+Linha de comando, sem servidor:
+
+```bash
+python -m formata documento.md        # lista + HTML no formato da seção 8
+python -m formata documento.md --json
+```
+
+## Testes
+
+```bash
+python -m pip install -r requirements-dev.txt
+python -m pytest                      # motor, API e navegador
 python scripts/gerar_relatorio.py     # regrava docs/RELATORIO-VALIDACAO.md
 ```
 
-Códigos de saída da linha de comando: `0` para formatado, `1` para falha na verificação (nada é entregue) e `2` para entrada vazia ou inválida.
-
-## Uso como biblioteca
-
-```python
-from formata import formatar
-
-r = formatar(texto)          # modo "auto", "markdown" ou "html"
-if r.ok:
-    r.lista_paginacao        # "Paginação:\n- Pág 1 | `# Título` | Tam 27 | 34 − 27 = 7 | FICA ..."
-    r.html                   # um <p> por linha
-    r.resposta               # lista + HTML num único bloco de código (seção 8)
-    r.itens                  # itens estruturados: Tam, Restante anterior/novo, páginas, resultado, conta
-    r.removidas, r.avisos    # o que saiu e por quê; pontos para conferência
-else:
-    r.codigo, r.mensagem, r.erros
-```
+Os testes de navegador procuram o Chromium do Playwright, ou o caminho em `FORMATA_CHROMIUM`, e são pulados se ele não existir. A auditoria de acessibilidade com axe-core roda quando `FORMATA_AXE_JS` aponta para um `axe.min.js` (pacote npm `axe-core`).
 
 ## Garantias
 
-- **Determinismo.** A mesma entrada produz a mesma saída, sem relógio, aleatoriedade ou dependência de tela.
-- **Integridade.** O texto de cada `<p>`, sem as tags `<strong>`, é idêntico à linha de origem, e cada remoção é registrada e conferida.
-- **Nada silenciosamente incorreto.** Se qualquer verificação falhar, o resultado sai com `ok = False` e sem HTML.
-- **Idempotência.** Reformatar a própria saída, que é um documento com `<p>` (seção 7), produz o mesmo HTML e a mesma lista.
-- **Conteúdo como dado.** Instruções escritas no documento não mudam as regras.
+- **Precisão.** A paginação segue as seções 5.1 a 5.4. Cada resultado é conferido por uma simulação física das páginas e pela nova segmentação do HTML gerado.
+- **Integridade.** O texto de cada `<p>`, sem as tags `<strong>`, é idêntico à linha de origem. Cada remoção é registrada e conferida.
+- **Nada silenciosamente incorreto.** Se qualquer verificação falhar, a API responde 422 sem HTML.
+- **Determinismo e idempotência.** A mesma entrada produz a mesma saída, e reformatar a própria saída não muda nada.
+- **Conteúdo como dado.** Instruções escritas no documento não alteram as regras. Na interface, o conteúdo nunca vira HTML da página, e a pré-visualização roda isolada.
+- **Privacidade.** Os documentos são processados em memória, num processo descartável, e não vão para disco nem para log.
 
-Veja `docs/REGRAS.md` para o mapeamento seção → código e as decisões de interpretação D1 a D13 (D1 a D7 validadas).
+## Identidade visual
+
+Cores, fontes e raios ficam em `frontend/marca/marca.css`. A família **Vivo Type** só entra quando os arquivos licenciados forem colocados em `frontend/marca/fontes/`. Até lá, a interface usa a fonte do sistema como substituta temporária. O logotipo da Vivo não é reproduzido. Veja `frontend/marca/README.md`.

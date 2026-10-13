@@ -1,12 +1,17 @@
 [project]
 name = "formata-ai"
-version = "0.1.0"
-description = "Formata.AI Web — motor determinístico de paginação e marcação HTML (Diretrizes v2.6)"
+version = "0.2.0"
+description = "Formata.AI Web — paginação e marcação HTML determinísticas (Diretrizes v2.6)"
 requires-python = ">=3.10"
-dependencies = []
+# O motor (pacote formata) só usa a biblioteca padrão; as dependências abaixo são do servidor.
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "python-multipart>=0.0.9",
+]
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+dev = ["pytest>=8", "httpx>=0.27", "playwright>=1.45"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

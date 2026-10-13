@@ -1,18 +1,22 @@
-# Relatório de validação — Formata.AI (prova de conceito)
+# Relatório de validação — Formata.AI Web
 
 Gerado em 13/10/2026 por `scripts/gerar_relatorio.py`, contra as Diretrizes Formata.AI v2.6.
 
 ## Suíte automatizada
 
-Resultado: **814 passed in 4.97s**
+Resultado: **866 passed, 1 warning in 41.20s**
 
-| Arquivo | O que cobre | Passou | Falhou |
-|---|---|---|---|
-| `test_medida_blocos.py` | Seções 5.1 e 5.2: custo por linha, delimitação e colagem de blocos | 27 | 0 |
-| `test_paginacao.py` | Seções 5.3 e 5.4: FICA, QUEBRA, SEGUE, regra 4, exemplo literal, 300 sequências aleatórias | 317 | 0 |
-| `test_entrada_marcacao.py` | Seções 3, 4, 5.6 e 7: títulos, negrito, rodapé, imagens, documento com <p>, vazio, inválido | 45 | 0 |
-| `test_aceitacao.py` | Cenários de aceitação da especificação e testes de mutação da verificação | 23 | 0 |
-| `test_regressao.py` | Saída de referência do documento real, determinismo, idempotência, 400 documentos aleatórios | 402 | 0 |
+Os testes de navegador usam Chromium (Playwright). A auditoria de acessibilidade com axe-core (WCAG 2.0/2.1/2.2 A e AA + boas práticas) roda quando `FORMATA_AXE_JS` aponta para o `axe.min.js`; ela foi incluída nesta execução.
+
+| Arquivo | O que cobre | Passou | Falhou | Pulado |
+|---|---|---|---|---|
+| `test_medida_blocos.py` | Seções 5.1 e 5.2: custo por linha, delimitação e colagem de blocos | 27 | 0 | 0 |
+| `test_paginacao.py` | Seções 5.3 e 5.4: FICA, QUEBRA, SEGUE, regra 4, exemplo literal, 300 sequências aleatórias | 317 | 0 | 0 |
+| `test_entrada_marcacao.py` | Seções 3, 4, 5.6 e 7: títulos, negrito, rodapé, imagens, documento com <p>, vazio, inválido | 47 | 0 | 0 |
+| `test_aceitacao.py` | Cenários de aceitação da especificação e testes de mutação da verificação | 23 | 0 | 0 |
+| `test_regressao.py` | Saída de referência do documento real, determinismo, idempotência, 400 documentos aleatórios | 402 | 0 | 0 |
+| `test_api.py` | API: contratos, limites, tipos de arquivo, erros, tempo-limite, cabeçalhos, logs sem conteúdo | 33 | 0 | 0 |
+| `test_interface.py` | Navegador real: fluxo completo, upload, erros, cópia, teclado, conteúdo malicioso, telas, acessibilidade (axe) | 17 | 0 | 0 |
 
 ## Cenários de aceitação
 

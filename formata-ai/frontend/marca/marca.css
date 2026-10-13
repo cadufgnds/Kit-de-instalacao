@@ -1,0 +1,72 @@
+/*
+ * Configuração de marca — Formata.AI Web
+ *
+ * Este é o único arquivo a editar para ajustar cores, tipografia e raios.
+ * As cores são valores de referência da identidade Vivo (roxo institucional
+ * e apoio). Confirme cada valor com o manual de marca vigente antes da
+ * publicação.
+ *
+ * TIPOGRAFIA
+ * A família Vivo Type só pode ser usada com os arquivos licenciados. Enquanto
+ * eles não estiverem na pasta marca/fontes/, a interface usa a fonte do
+ * sistema (substituta temporária), sem apresentá-la como Vivo Type.
+ * Para ativar a Vivo Type:
+ *   1. copie os arquivos licenciados para marca/fontes/ com os nomes abaixo;
+ *   2. descomente os blocos @font-face;
+ *   3. troque --marca-fonte pela linha comentada logo abaixo dela.
+ */
+
+/*
+@font-face {
+  font-family: "Vivo Type";
+  src: url("fontes/VivoType-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vivo Type";
+  src: url("fontes/VivoType-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+:root {
+  /* Tipografia */
+  --marca-fonte: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* --marca-fonte: "Vivo Type", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; */
+  --marca-fonte-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* Cores institucionais (referência; confirmar no manual de marca) */
+  --marca-roxo: #660099;
+  --marca-roxo-escuro: #4a0a70;
+  --marca-roxo-profundo: #2b0742;
+  --marca-roxo-medio: #8f3fbf;
+  --marca-roxo-claro: #f3eaf8;
+  --marca-roxo-suave: #faf6fc;
+  --marca-rosa: #eb3c7d; /* destaque decorativo: não usar em texto pequeno (contraste 3,8:1) */
+
+  /* Neutros */
+  --marca-texto: #1c1424;
+  --marca-texto-suave: #5b5266;
+  --marca-fundo: #ffffff;
+  --marca-fundo-alt: #f7f4f9;
+  --marca-borda: #e4dcea;
+  --marca-borda-forte: #c9bcd3;
+
+  /* Estados (contraste ≥ 4,5:1 sobre o fundo claro correspondente) */
+  --marca-sucesso: #0b6b3a;
+  --marca-sucesso-fundo: #e5f4ec;
+  --marca-alerta: #7a4f00;
+  --marca-alerta-fundo: #fff4d9;
+  --marca-erro: #a4221a;
+  --marca-erro-fundo: #fdecea;
+
+  /* Formas */
+  --marca-raio: 20px;
+  --marca-raio-pequeno: 12px;
+  --marca-raio-pilula: 999px;
+  --marca-sombra: 0 1px 2px rgba(43, 7, 66, 0.06), 0 8px 24px rgba(43, 7, 66, 0.08);
+}

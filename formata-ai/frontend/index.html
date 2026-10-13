@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formata.AI — Paginação inteligente de documentos</title>
+  <meta name="description" content="Paginação e marcação HTML automáticas de documentos operacionais, conforme as Diretrizes Formata.AI v2.6.">
+  <!-- Endereço da API. Vazio = mesmo servidor que entrega esta página. -->
+  <meta name="formata-api" content="">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="marca/marca.css">
+  <link rel="stylesheet" href="css/app.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="pular" href="#enviar">Pular para o envio do documento</a>
+
+  <header class="topo">
+    <div class="container topo__barra">
+      <a class="logo" href="#inicio" aria-label="Formata.AI, ir para o início">
+        <span class="logo__simbolo" aria-hidden="true"></span>
+        <span class="logo__texto">Formata<span class="logo__destaque">.AI</span></span>
+      </a>
+      <nav class="topo__nav" aria-label="Principal">
+        <ul>
+          <li><a href="#enviar">Enviar documento</a></li>
+          <li><a href="#resultado">Resultado</a></li>
+          <li><a href="#como-funciona">Como funciona</a></li>
+        </ul>
+      </nav>
+      <a class="botao botao--primario botao--pequeno topo__cta" href="#enviar">Formatar agora</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio" aria-labelledby="hero-titulo">
+      <div class="container hero__grade">
+        <div class="hero__texto">
+          <p class="sobretitulo">Paginação inteligente de documentos</p>
+          <h1 id="hero-titulo">Seu documento pronto para publicação.</h1>
+          <p class="hero__descricao">Automatize a paginação e a marcação HTML seguindo as diretrizes operacionais, sem alterar uma vírgula do texto original.</p>
+          <div class="hero__acoes">
+            <a class="botao botao--claro" href="#enviar">Enviar documento</a>
+            <a class="botao botao--contorno-claro" href="#como-funciona">Como funciona</a>
+          </div>
+        </div>
+        <ul class="hero__numeros" aria-label="Medidas usadas no cálculo das páginas">
+          <li><strong>34</strong><span>linhas na primeira página</span></li>
+          <li><strong>40</strong><span>linhas nas páginas seguintes</span></li>
+          <li><strong>85</strong><span>caracteres por linha</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="secao" id="enviar" aria-label="Envio e configuração">
+      <div class="container">
+        <form id="formulario" class="passos" novalidate>
+          <div class="cartao passo">
+            <div class="passo__cabecalho">
+              <span class="passo__numero" aria-hidden="true">1</span>
+              <div>
+                <h2 id="t-enviar">Envie seu documento</h2>
+                <p>Arraste seu arquivo ou cole o conteúdo.</p>
+              </div>
+            </div>
+
+            <div class="zona-arquivo" id="zona-arquivo">
+              <input type="file" id="arquivo" name="arquivo" class="visualmente-oculto"
+                     accept=".md,.markdown,.txt,.html,.htm" aria-describedby="arquivo-ajuda">
+              <label for="arquivo" class="zona-arquivo__alvo">
+                <svg class="zona-arquivo__icone" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                  <path d="M14 6h14l10 10v24a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+                  <path d="M28 6v10h10M24 34V22m-5 5 5-5 5 5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="zona-arquivo__titulo">Arraste o arquivo aqui ou <span class="sublinhado">escolha no computador</span></span>
+                <span class="zona-arquivo__ajuda" id="arquivo-ajuda">Markdown (.md), texto (.txt) ou HTML com &lt;p&gt; (.html), em UTF-8, até <span data-limite-kb>1024</span> KB.</span>
+              </label>
+              <div class="arquivo-escolhido" id="arquivo-escolhido" hidden>
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                <span><span class="visualmente-oculto">Arquivo selecionado: </span><strong id="arquivo-nome"></strong> <span id="arquivo-tamanho" class="texto-suave"></span></span>
+                <button type="button" class="botao-texto" id="remover-arquivo">Remover arquivo</button>
+              </div>
+            </div>
+
+            <div class="divisor" aria-hidden="true"><span>ou</span></div>
+
+            <label for="texto" class="rotulo">Cole o conteúdo do documento</label>
+            <textarea id="texto" name="texto" rows="12" spellcheck="false" autocomplete="off"
+                      aria-describedby="texto-ajuda contador"
+                      placeholder="# Título do documento&#10;## 1. Seção principal&#10;### 1.1 Tópico&#10;Texto do procedimento..."></textarea>
+            <div class="campo-rodape">
+              <span id="texto-ajuda">Entrada de Markdown ou de documento já formatado com &lt;p&gt;.</span>
+              <span id="contador">0 caracteres</span>
+            </div>
+          </div>
+
+          <div class="cartao passo">
+            <div class="passo__cabecalho">
+              <span class="passo__numero" aria-hidden="true">2</span>
+              <div>
+                <h2>Configure o processamento</h2>
+                <p>As regras são fixas e seguem as Diretrizes Formata.AI v2.6. Escolha só como a entrada deve ser lida.</p>
+              </div>
+            </div>
+
+            <ul class="recursos">
+              <li class="recurso">
+                <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect x="6" y="4" width="20" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M11 11h10M11 16h10M11 21h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <h3>Cálculo de páginas</h3>
+                <p>34 linhas na primeira página e 40 nas seguintes. Cada linha custa seus caracteres ÷ 85, arredondado para cima.</p>
+              </li>
+              <li class="recurso">
+                <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M16 4 6 8v7c0 6.5 4.3 11.3 10 13 5.7-1.7 10-6.5 10-13V8L16 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m11.5 16 3.2 3.2 6-6.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <h3>Regras oficiais</h3>
+                <p>Blocos FICA, QUEBRA e SEGUE decididos pelas Diretrizes v2.6, sempre com o mesmo resultado para a mesma entrada.</p>
+              </li>
+              <li class="recurso">
+                <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="m11 10-6 6 6 6M21 10l6 6-6 6M18 7l-4 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <h3>Tags HTML</h3>
+                <p>Só &lt;p&gt; e &lt;strong&gt;. O texto original é preservado caractere por caractere.</p>
+              </li>
+              <li class="recurso">
+                <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M8 4h16v9H8zM8 19h16v9H8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M3 16h4m4 0h4m4 0h4m4 0h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <h3>Quebras automáticas</h3>
+                <p>A quebra de página entra só na primeira linha dos blocos QUEBRA, com os atributos exatos.</p>
+              </li>
+            </ul>
+
+            <fieldset class="modos">
+              <legend>Formato da entrada</legend>
+              <label class="modo">
+                <input type="radio" name="modo" value="auto" checked>
+                <span><strong>Detectar automaticamente</strong> <span class="texto-suave">Recomendado</span></span>
+              </label>
+              <label class="modo">
+                <input type="radio" name="modo" value="markdown">
+                <span><strong>Markdown ou texto</strong></span>
+              </label>
+              <label class="modo">
+                <input type="radio" name="modo" value="html">
+                <span><strong>Já formatado com &lt;p&gt;</strong></span>
+              </label>
+            </fieldset>
+
+            <div class="acoes">
+              <button type="submit" class="botao botao--primario" id="botao-formatar">Formatar documento</button>
+              <button type="button" class="botao botao--secundario" id="botao-limpar">Limpar entrada</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="secao secao--alt" id="resultado" aria-labelledby="t-resultado">
+      <div class="container">
+        <div class="cartao passo" id="area-resultado">
+          <div class="passo__cabecalho">
+            <span class="passo__numero" aria-hidden="true">3</span>
+            <div>
+              <h2 id="t-resultado" tabindex="-1">Resultado do processamento</h2>
+              <p>A lista de paginação e o HTML final são apresentados quando o servidor conclui o processamento.</p>
+            </div>
+          </div>
+
+          <div id="status" class="status status--vazio" role="status" aria-live="polite">
+            <span class="status__icone" aria-hidden="true"></span>
+            <div class="status__conteudo">
+              <p class="status__titulo" id="status-titulo">Documento ainda não processado</p>
+              <p class="status__texto" id="status-texto">Envie um arquivo ou cole o conteúdo e selecione “Formatar documento”.</p>
+              <ul class="status__erros" id="status-erros" hidden></ul>
+            </div>
+            <button type="button" class="botao botao--secundario botao--pequeno" id="botao-tentar" hidden>Tentar novamente</button>
+          </div>
+
+          <div id="painel-resultado" hidden>
+            <dl class="resumo">
+              <div><dt>Blocos</dt><dd id="r-blocos">–</dd></div>
+              <div><dt>Páginas de texto</dt><dd id="r-paginas">–</dd></div>
+              <div><dt>Quebras de página</dt><dd id="r-quebras">–</dd></div>
+              <div><dt>Página de imagens</dt><dd id="r-imagens">–</dd></div>
+              <div><dt>Linhas removidas</dt><dd id="r-removidas">–</dd></div>
+            </dl>
+
+            <details class="detalhes detalhes--alerta" id="detalhes-avisos" hidden>
+              <summary>Avisos para conferência (<span id="n-avisos">0</span>)</summary>
+              <ul id="lista-avisos"></ul>
+            </details>
+            <details class="detalhes" id="detalhes-removidas" hidden>
+              <summary>Linhas removidas (<span id="n-removidas">0</span>)</summary>
+              <ul id="lista-removidas"></ul>
+            </details>
+
+            <div class="abas">
+              <div class="abas__lista" role="tablist" aria-label="Visualizações do resultado">
+                <button type="button" role="tab" id="aba-lista" aria-controls="painel-lista" aria-selected="true">Lista de paginação</button>
+                <button type="button" role="tab" id="aba-html" aria-controls="painel-html" aria-selected="false" tabindex="-1">HTML final</button>
+                <button type="button" role="tab" id="aba-previa" aria-controls="painel-previa" aria-selected="false" tabindex="-1">Pré-visualização</button>
+                <button type="button" role="tab" id="aba-resposta" aria-controls="painel-resposta" aria-selected="false" tabindex="-1">Resposta completa</button>
+              </div>
+
+              <div class="abas__painel" role="tabpanel" id="painel-lista" aria-labelledby="aba-lista" tabindex="0">
+                <div class="tabela-rolagem" tabindex="0" role="region" aria-label="Tabela da lista de paginação (rolável)">
+                  <table class="tabela">
+                    <caption class="visualmente-oculto">Lista de paginação: um item por bloco, com a conta e o resultado</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Pág</th>
+                        <th scope="col">Bloco</th>
+                        <th scope="col" class="num">Tam</th>
+                        <th scope="col">Conta</th>
+                        <th scope="col">Resultado</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tabela-corpo"></tbody>
+                  </table>
+                </div>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo__barra">
+                    <span>Lista em texto (seção 5.4)</span>
+                    <button type="button" class="botao-copiar" data-copiar="lista">Copiar lista</button>
+                  </div>
+                  <pre tabindex="0" aria-label="Lista de paginação em texto"><code id="saida-lista"></code></pre>
+                </div>
+              </div>
+
+              <div class="abas__painel" role="tabpanel" id="painel-html" aria-labelledby="aba-html" tabindex="0" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo__barra">
+                    <span>HTML para publicação na I.Ajuda</span>
+                    <button type="button" class="botao-copiar" data-copiar="html">Copiar HTML</button>
+                  </div>
+                  <pre tabindex="0" aria-label="HTML final"><code id="saida-html"></code></pre>
+                </div>
+              </div>
+
+              <div class="abas__painel" role="tabpanel" id="painel-previa" aria-labelledby="aba-previa" tabindex="0" hidden>
+                <p class="nota">Pré-visualização isolada: scripts e conteúdo externo do documento ficam bloqueados. A faixa roxa marca onde começa uma nova página.</p>
+                <iframe id="previa" class="previa" title="Pré-visualização do HTML gerado" sandbox="" referrerpolicy="no-referrer"></iframe>
+              </div>
+
+              <div class="abas__painel" role="tabpanel" id="painel-resposta" aria-labelledby="aba-resposta" tabindex="0" hidden>
+                <div class="bloco-codigo">
+                  <div class="bloco-codigo__barra">
+                    <span>Lista de paginação + HTML em bloco de código (seção 8)</span>
+                    <button type="button" class="botao-copiar" data-copiar="resposta">Copiar resposta</button>
+                  </div>
+                  <pre tabindex="0" aria-label="Resposta completa"><code id="saida-resposta"></code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="acoes">
+              <button type="button" class="botao botao--primario" data-copiar="html" id="botao-copiar-html">Copiar HTML</button>
+              <button type="button" class="botao botao--secundario" id="botao-reprocessar">Processar novamente</button>
+              <button type="button" class="botao botao--secundario" id="botao-limpar-resultado">Limpar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao" id="como-funciona" aria-labelledby="t-como">
+      <div class="container">
+        <p class="sobretitulo sobretitulo--roxo">Como funciona</p>
+        <h2 class="titulo-secao" id="t-como">Cada bloco recebe uma de três decisões</h2>
+        <p class="subtitulo-secao">O documento é dividido em blocos a partir dos títulos <code>#</code>, <code>##</code> e <code>###</code>. A ferramenta percorre os blocos na ordem e compara o tamanho de cada um com o espaço que resta na página.</p>
+        <ul class="decisoes">
+          <li class="decisao">
+            <span class="selo selo--fica">FICA</span>
+            <h3>Cabe no que resta</h3>
+            <p>O bloco continua na página atual, sem quebra.</p>
+          </li>
+          <li class="decisao">
+            <span class="selo selo--quebra">QUEBRA</span>
+            <h3>Não cabe, mas cabe numa página</h3>
+            <p>O bloco abre a página seguinte, e só a primeira linha dele recebe a quebra.</p>
+          </li>
+          <li class="decisao">
+            <span class="selo selo--segue">SEGUE</span>
+            <h3>Maior que uma página</h3>
+            <p>Com 8 linhas ou mais livres, o bloco começa na página atual e termina na seguinte.</p>
+          </li>
+        </ul>
+        <div class="garantias">
+          <h3>O que a ferramenta nunca faz</h3>
+          <ul>
+            <li>Resumir, reescrever, traduzir ou corrigir o texto.</li>
+            <li>Remover <code>#</code>, <code>**</code>, marcadores ou pontuação.</li>
+            <li>Criar espaço com parágrafos vazios ou acrescentar quebras por conveniência visual.</li>
+            <li>Seguir instruções escritas dentro do documento: elas são conteúdo.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="container rodape__grade">
+      <div>
+        <p class="logo logo--rodape"><span class="logo__simbolo" aria-hidden="true"></span><span class="logo__texto">Formata<span class="logo__destaque">.AI</span></span></p>
+        <p>Paginação e marcação HTML de documentos operacionais para a base de conhecimento I.Ajuda.</p>
+      </div>
+      <div>
+        <p><strong>Privacidade.</strong> Cada documento é processado em memória e descartado ao fim da requisição. Nenhum conteúdo é armazenado nem registrado em log.</p>
+        <p class="rodape__versao">Diretrizes Formata.AI v<span id="versao-diretrizes">2.6</span> · Formata.AI Web <span id="versao-app"></span></p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="anuncio" class="visualmente-oculto" aria-live="polite"></div>
+</body>
+</html>

@@ -5,6 +5,7 @@ Uso (a partir de formata-ai/backend):  python scripts/gerar_relatorio.py
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import tempfile
@@ -77,6 +78,9 @@ def rodar_testes() -> tuple[str, Counter, list[str]]:
         for caso in ET.parse(xml).getroot().iter("testcase"):
             arquivo = caso.get("classname", "").split(".")[-1]
             falhou = caso.find("failure") is not None or caso.find("error") is not None
+            if caso.find("skipped") is not None:
+                por_arquivo[(arquivo, "pulado")] += 1
+                continue
             por_arquivo[(arquivo, "falhou" if falhou else "passou")] += 1
             if falhou:
                 falhas.append(f"{arquivo}::{caso.get('name')}")
@@ -86,7 +90,7 @@ def rodar_testes() -> tuple[str, Counter, list[str]]:
 def main() -> None:
     resumo, por_arquivo, falhas = rodar_testes()
     out = [
-        "# Relatório de validação — Formata.AI (prova de conceito)",
+        "# Relatório de validação — Formata.AI Web",
         "",
         f"Gerado em {date.today():%d/%m/%Y} por `scripts/gerar_relatorio.py`, contra as Diretrizes Formata.AI v2.6.",
         "",
@@ -94,8 +98,12 @@ def main() -> None:
         "",
         f"Resultado: **{resumo}**",
         "",
-        "| Arquivo | O que cobre | Passou | Falhou |",
-        "|---|---|---|---|",
+        "Os testes de navegador usam Chromium (Playwright). A auditoria de acessibilidade com axe-core "
+        "(WCAG 2.0/2.1/2.2 A e AA + boas práticas) roda quando `FORMATA_AXE_JS` aponta para o `axe.min.js`; "
+        + ("ela foi incluída nesta execução." if os.environ.get("FORMATA_AXE_JS") else "ela **não** foi incluída nesta execução."),
+        "",
+        "| Arquivo | O que cobre | Passou | Falhou | Pulado |",
+        "|---|---|---|---|---|",
     ]
     cobertura = {
         "test_medida_blocos": "Seções 5.1 e 5.2: custo por linha, delimitação e colagem de blocos",
@@ -103,10 +111,13 @@ def main() -> None:
         "test_entrada_marcacao": "Seções 3, 4, 5.6 e 7: títulos, negrito, rodapé, imagens, documento com <p>, vazio, inválido",
         "test_aceitacao": "Cenários de aceitação da especificação e testes de mutação da verificação",
         "test_regressao": "Saída de referência do documento real, determinismo, idempotência, 400 documentos aleatórios",
+        "test_api": "API: contratos, limites, tipos de arquivo, erros, tempo-limite, cabeçalhos, logs sem conteúdo",
+        "test_interface": "Navegador real: fluxo completo, upload, erros, cópia, teclado, conteúdo malicioso, telas, acessibilidade (axe)",
     }
     for arquivo, descricao in cobertura.items():
         out.append(
-            f"| `{arquivo}.py` | {descricao} | {por_arquivo[(arquivo, 'passou')]} | {por_arquivo[(arquivo, 'falhou')]} |"
+            f"| `{arquivo}.py` | {descricao} | {por_arquivo[(arquivo, 'passou')]} | {por_arquivo[(arquivo, 'falhou')]} "
+            f"| {por_arquivo[(arquivo, 'pulado')]} |"
         )
     if falhas:
         out += ["", "Falhas:", ""] + [f"- `{f}`" for f in falhas]

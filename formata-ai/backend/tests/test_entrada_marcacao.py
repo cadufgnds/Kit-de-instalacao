@@ -242,3 +242,17 @@ def test_tags_estranhas_no_documento_sao_mantidas_e_avisadas():
     r = formatar("# T\n<script>alert(1)</script>")
     assert r.ok and "<p><script>alert(1)</script></p>" in r.html
     assert any("script" in a for a in r.avisos)
+
+
+def test_negrito_sobreposto_a_strong_existente_e_mantido_como_recebido():
+    r = formatar("<p><strong>início **meio</strong> fim**</p>")
+    assert r.ok, r.erros
+    assert r.html == "<p><strong>início **meio</strong> fim**</p>"
+    assert any("sobreposto" in a for a in r.avisos)
+
+
+def test_strong_aninhado_na_entrada_e_achatado_sem_mudar_o_texto():
+    r = formatar("<p><strong>a <strong>b</strong> c</strong> **d**</p>")
+    assert r.ok, r.erros
+    assert r.html == "<p><strong>a b c</strong> <strong>**d**</strong></p>"
+    assert any("aninhado" in a for a in r.avisos)

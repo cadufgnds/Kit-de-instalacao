@@ -94,19 +94,22 @@ def _tokenizar_html(texto: str) -> tuple[list[Linha], list[str]]:
                 linhas.append(Linha(len(linhas) + 1, parte))
 
     pos = 0
-    for m in R.RE_P_HTML.finditer(texto):
+    while (m := R.RE_P_ABERTURA.search(texto, pos)) is not None:
+        fecha = R.RE_P_FECHAMENTO.search(texto, m.end())
+        if fecha is None:
+            break  # <p> sem fechamento: o resto é texto solto
         adicionar_trecho_solto(texto[pos : m.start()])
-        atributos = m.group(1).strip()
+        atributos = (m.group(1) or "").strip()
         if atributos:
             if "quebra-pagina" in atributos or "page-break" in atributos:
                 quebras_antigas += 1
             else:
                 outros_atributos += 1
-        conteudo = m.group(2)
+        conteudo = texto[m.end() : fecha.start()]
         if "\n" in conteudo:
             multilinha += 1
         linhas.append(Linha(len(linhas) + 1, conteudo))
-        pos = m.end()
+        pos = fecha.end()
     adicionar_trecho_solto(texto[pos:])
 
     if quebras_antigas:

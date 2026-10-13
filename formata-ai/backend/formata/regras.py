@@ -55,10 +55,11 @@ COLAGEM_SOMENTE_ADJACENTES = True
 
 # --- Marcação HTML reconhecida no conteúdo ----------------------------------
 RE_STRONG_TAG = re.compile(r"</?strong\s*>", re.IGNORECASE)
-RE_P_HTML = re.compile(r"<p\b([^>]*)>(.*?)</p\s*>", re.IGNORECASE | re.DOTALL)
-RE_P_ABERTURA = re.compile(r"<p(?:\s[^>]*)?>", re.IGNORECASE)
+# Repetições limitadas ({0,N}) evitam tempo quadrático em entradas malformadas.
+RE_P_ABERTURA = re.compile(r"<p(\s[^<>]{0,2000})?>", re.IGNORECASE)
+RE_P_FECHAMENTO = re.compile(r"</p\s{0,20}>", re.IGNORECASE)
 RE_SEM_TEXTO = re.compile(r"&nbsp;|&#160;|&#x0*a0;|<br\s*/?>", re.IGNORECASE)
-RE_TAG_QUALQUER = re.compile(r"</?[A-Za-z][^>]*>")
+RE_TAG_QUALQUER = re.compile(r"</?[A-Za-z][^<>]{0,2000}>")
 
 # --- Blocos de código (Markdown) --------------------------------------------
 RE_CERCA = re.compile(r"^ {0,3}(`{3,}|~{3,})")
@@ -67,10 +68,10 @@ RE_CODIGO_INLINE = re.compile(r"(?<!`)(`+)(?!`)(.+?)(?<!`)\1(?!`)")
 # --- Seção 5.6 — Imagens -----------------------------------------------------
 # Decisão de interpretação D6: só padrões explícitos ("na dúvida, não acrescentar").
 _MARCADOR = (
-    r"!\[[^\]]*\]\([^)]*\)"  # imagem Markdown
-    r"|<img\b[^>]*>"  # imagem HTML
-    r"|\[\s*(?:imagem|imagens|images?|img|figuras?|fig\.?|prints?|capturas? de tela"
-    r"|screenshots?|fotos?|ilustra[çc](?:ão|ões|ao|oes))\b[^\]\n]*\]"
+    r"!\[[^\[\]\n]{0,500}\]\([^()\n]{0,2000}\)"  # imagem Markdown
+    r"|<img\b[^<>]{0,2000}>"  # imagem HTML
+    r"|\[[ \t]{0,10}(?:imagem|imagens|images?|img|figuras?|fig\.?|prints?|capturas? de tela"
+    r"|screenshots?|fotos?|ilustra[çc](?:ão|ões|ao|oes))\b[^\[\]\n]{0,300}\]"
 )
 RE_MARCADOR_IMAGEM = re.compile(_MARCADOR, re.IGNORECASE)
 RE_LINHA_SO_MARCADORES = re.compile(rf"^\s*(?:(?:{_MARCADOR})\s*)+$", re.IGNORECASE)

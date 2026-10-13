@@ -114,6 +114,10 @@ def verificar(
     if len(paragrafos) != esperado:
         return erros + [f"Integridade: {len(paragrafos)} parágrafos na saída; esperados {esperado}."]
 
+    # Linhas em que o motor deixou de envolver um ** por sobreposição a <strong> existente.
+    sobrepostas = {
+        int(m.group(1)) for a in avisos_marcacao if (m := re.match(r"Linha (\d+): negrito sobreposto", a))
+    }
     conteudo_saida: list[str] = []
     origem = iter(mantidas)
     for i, (quebra, conteudo) in enumerate(paragrafos):
@@ -122,7 +126,7 @@ def verificar(
                 erros.append("Imagens: a linha de abertura da página de imagens está diferente do padrão.")
             continue
         linha = next(origem)
-        erros += _verificar_paragrafo(i + 1, linha, conteudo, avisos_marcacao)
+        erros += _verificar_paragrafo(i + 1, linha, conteudo, sobrepostas)
         conteudo_saida.append(conteudo)
 
     erros += _verificar_quebras(entrada, blocos, itens, paragrafos, pos_imagens)
@@ -155,7 +159,7 @@ def _verificar_remocoes(entrada: Entrada) -> list[str]:
     return erros
 
 
-def _verificar_paragrafo(n: int, linha: Linha, conteudo: str, avisos_marcacao: list[str]) -> list[str]:
+def _verificar_paragrafo(n: int, linha: Linha, conteudo: str, sobrepostas: set[int]) -> list[str]:
     erros: list[str] = []
     texto_saida = RE_STRONG_QUALQUER.sub("", conteudo)
     texto_origem = RE_STRONG_QUALQUER.sub("", linha.bruto)
@@ -176,15 +180,21 @@ def _verificar_paragrafo(n: int, linha: Linha, conteudo: str, avisos_marcacao: l
         if conteudo != f"{R.STRONG_ABRE}{linha.texto}{R.STRONG_FECHA}":
             erros.append(f"Parágrafo {n}: título sem um <strong> único na linha inteira.")
         return erros
-    spans_origem, _, _ = _spans_strong(linha.bruto)
+    spans_origem = set(_spans_strong(linha.bruto)[0])
     negritos = trechos_negrito(linha.texto, linha.em_codigo)
-    sobreposto = any(f"Linha {linha.numero}: negrito sobreposto" in a for a in avisos_marcacao)
+    sobreposto = linha.numero in sobrepostas
+    # spans e negritos estão em ordem e sem sobreposição: varredura linear.
+    k = 0
     for ini, fim in negritos:
-        if not any(a <= ini and fim <= b for a, b in spans) and not sobreposto:
+        while k < len(spans) and spans[k][1] < fim:
+            k += 1
+        dentro = k < len(spans) and spans[k][0] <= ini and fim <= spans[k][1]
+        if not dentro and not sobreposto:
             erros.append(f"Parágrafo {n}: `**` sem <strong> na posição {ini}.")
-    for span in spans:
-        if span not in spans_origem and span not in negritos:
-            erros.append(f"Parágrafo {n}: <strong> acrescentado fora de título ou negrito.")
+            break
+    permitidos = spans_origem | set(negritos)
+    if any(span not in permitidos for span in spans):
+        erros.append(f"Parágrafo {n}: <strong> acrescentado fora de título ou negrito.")
     return erros
 
 
